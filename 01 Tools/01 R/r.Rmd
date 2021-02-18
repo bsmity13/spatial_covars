@@ -11,6 +11,15 @@ css: ../../my.css
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+colorize <- function(x, color = "red") {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
 ```
 
 Most of us use `R` on a regular basis for our analyses, but there's a chance that there are more things that `R` can do for you that you may not be aware of. This short section is on a few features of `R` that you might not already be familiar with, but which we will be using throughout the workshop.
@@ -21,7 +30,104 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 This workshop has accompanying R Markdown HTML files for each section. You can also find the source code (*i.e.*, the `*.Rmd` file) used to create the HTML doc in each section's folder. You may find it easier to copy-and-paste from the source code than from the HTML file itself.
 
-If you want to learn to use R Markdown on your own, it's easy to get started! RStudio's default template will set you up with everything you need to get started. From RStudio, click the "New File" button in the top 
-left of your screen and select "R Markdown".
+If you want to learn to use R Markdown on your own, it's easy to get started! RStudio's default template will set you up with everything you need to get started. From RStudio, click the "New File" button in the top left of your screen and select "R Markdown".
 
-![Rmd Screenshot](../../img/new_Rmd.png)
+```{r new_rmd, echo = FALSE, out.width = "40%"}
+knitr::include_graphics("../../img/new_Rmd.png")
+```
+
+## R Packages
+
+We're all familiar with R packages, but do we *really* know how they work? And do we really know how to troubleshoot problems? Let's dive into some details and see what we can learn.  
+
+### What is an R package, anyway?
+
+> The fundamental unit of shareable code
+>
+> `r tufte::quote_footer("Wickham and Bryan, *R Packages*")`
+
+> Extensions to the R statistical programming language. [They] contain code, data, and documentation in a standardised collection format.
+>
+> `r tufte::quote_footer("Wikipedia")`
+
+>Packages provide a mechanism for loading optional code, data and documentation as needed. The R distribution itself includes about 30 packages.
+>
+> A package is a directory of files which extend R.
+>
+> `r tufte::quote_footer("R Core Team, *Writing R Extensions*")`
+
+
+> A package is **not** a *library*.
+>
+> `r tufte::quote_footer("R Core Team, *Writing R Extensions*")`
+
+While the primary purpose of packages is to write code for others to use, there are some compelling other uses.
+
+  * Hilary Parker on Personal R Packages
+
+  > Wouldn’t it be great if incoming graduate students in Biostatistics/Statistics were taught to create a personal repository of functions like this?
+  >
+  > `r tufte::quote_footer("Hilary Parker, \"Not So Standard Deviations\"")` 
+  > [Personal R Packages](https://hilaryparker.com/2013/04/03/personal-r-packages/)
+  
+  > I really should just make an R package with these functions so I don’t have to keep copy/pasting them like a goddamn luddite.
+  >
+  >`r tufte::quote_footer("Hilary Parker, \"Not So Standard Deviations\"")`
+  > [Writing an R package from scratch](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/)
+
+  * R Packages as Research Compendia
+  
+  > As computer-based research has increased in complexity, so have the challenges of ensuring that this research is reproducible. To address this challenge, we review the concept of the research compendium as a solution for providing a standard and easily recognizable way for organizing the digital materials of a research project to enable other researchers to inspect, reproduce, and extend the research.
+  >
+  > `r tufte::quote_footer("Marwick et al. 2018 *The American Statistician*")`
+  > DOI: [10.1080/00031305.2017.1375986](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375986)
+
+### Source vs. Binary
+
+R packages are written in `R` (and sometimes other languages, like C++). They have some other specific requirements, but the functions (and sometimes the documentation) are actually written in a series of (mostly) R scripts. This original code, written in `R`, is the **source**. In general, **source** code is human-readable.
+
+Before a source package can be used normally in `R`, it must be **installed**. A source package can be installed by the R utility `R CMD INSTALL`, which you can read about in R with `?INSTALL`. 
+
+On macOS and Windows, installed packages are stored as **binaries**, meaning they have been translated from text into a binary format that is specific to the operating system. *I.e.*, you can't run a package built on macOS on a Windows machine. In general, **binary** code is *not* human-readable.
+
+By default, macOS and Windows do not have the system utilities needed to build a binary. We will come back to this in the next section (**Building Packages from Source**). Instead, most users will download pre-built binaries from [CRAN](https://cran.r-project.org/).
+
+Authors of R packages submit their work to CRAN, which (after approval) takes the source code and creates a build (i.e., a **binary**) for many different versions of `R` and for many different operating systems (various Windows, macOS, and Linux OSes). When you run `install.packages()`, you are by default connecting to CRAN, downloading the appropriate **binary** for your machine, and unzipping it into your default *library directory*. That is, CRAN built the **binary** for you so that you don't need the extra build tools.
+
+### Building Packages from Source
+
+*Okay, but what if I want to build my own package locally?*
+
+You can do that! But assuming you're not on a Linux machine, you're going to need some help.
+
+  * Windows users:  
+      - You need `Rtools`. *It is __not__ an R package.* It is a stand-alone collection of tools and libraries that can be used to build packages (or even R itself) from source code. You can find the download and install instructions [here](https://cran.r-project.org/bin/windows/Rtools/).
+    
+  * macOS users:
+    - You need the `Xcode` command line tools (which, apparently, requires you to register as an Apple developer). You can get it from the Mac App Store (*I think*. I am not a Mac user!).
+    
+*But I don't write R packages. Why would I need to know this?*  
+
+First, maybe you want to learn to write your own package! But also, many programmers share their **source** code rather than a built **binary**. You can download their source code, but you need to build it yourself! One very popular example of this is when a developer posts an R package to a GitHub repository.
+
+### Installing Packages from GitHub
+
+If you want to install someone's package from the source code on GitHub, there are multiple ways to go about it. For example, you could:  
+
+  1. Navigate to their GitHub repository ("repo") online. For example, you can see one of mine at https://github.com/bsmity13/LoCoHverlap. From the web browser, you can click **`r colorize("Code", "green")`**, download a ZIP file, unzip it, and use `R CMD INSTALL` to install it yourself.
+  
+```{r git_zip, out.width = "100%", echo = FALSE}
+  
+knitr::include_graphics("../../img/github_zip.png")
+
+```
+
+  2. Use an R package to help you! The package `devtools` is maintained by RStudio to help package developers with their workflow. One useful function is `devtools::install_github()`. You point the function to the GitHub repo, and it takes care of the rest (*i.e.*, all the other arguments have sensible defaults). For example, if you wanted to install my package in the example above:
+  
+```{r install_locohverlap, eval = FALSE}
+devtools::install_packages("bsmity13/LoCoHverlap")
+```
+
+  (Of course, make sure you have the `devtools` package already installed!)  
+  
+## Interfacing with the Operating System

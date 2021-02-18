@@ -1,0 +1,59 @@
+footer { padding: 2.5rem 0; }
+blockquote { border-left: 2px solid #6c757d; padding-left: 10px; margin-top: 2rem; margin-bottom: 2rem; }
+
+figure > img {
+    display: block;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+}
+
+body {
+	margin: auto;
+}
+
+.header {
+	display: block;
+	margin-top: -10;
+	margin-right: 0;	
+	margin-left: 0;
+	width: 100%;
+	height: 200px;
+	overflow: hidden;
+	background-color: #BBBBFF; 
+	background-size: 100%;
+}
+
+.toc {
+	display: block;
+	width: 80%;
+	margin: auto;
+}
+
+h1 {
+	font-size: 400%;
+	text-align: center;
+	color:black;
+	-webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+	text-shadow:
+       -1px -1px 0 #000,  
+       1px -1px 0 #000,
+       -1px 1px 0 #000,
+       1px 1px 0 #000;
+   background: #FFFFFF70;
+   padding: 10px 10px 10px 10px;
+   width: 60%;
+   margin: auto;
+}
+
+h4 {
+	font-size: 150%;
+	text-align: center;
+	color:black;
+   background: #FFFFFF70;
+   padding: 10px 10px 10px 10px;
+   width: 40%;
+   margin: auto;
+}
