@@ -1,0 +1,1 @@
+# Spatial Covariates Workshop
