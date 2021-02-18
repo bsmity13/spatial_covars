@@ -1,0 +1,27 @@
+---
+title: "R | Spatial Covariates Workshop"
+author: "Brian J. Smith"
+date: "February 22, 2021"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+css: ../../my.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Most of us use `R` on a regular basis for our analyses, but there's a chance that there are more things that `R` can do for you that you may not be aware of. This short section is on a few features of `R` that you might not already be familiar with, but which we will be using throughout the workshop.
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+This workshop has accompanying R Markdown HTML files for each section. You can also find the source code (*i.e.*, the `*.Rmd` file) used to create the HTML doc in each section's folder. You may find it easier to copy-and-paste from the source code than from the HTML file itself.
+
+If you want to learn to use R Markdown on your own, it's easy to get started! RStudio's default template will set you up with everything you need to get started. From RStudio, click the "New File" button in the top 
+left of your screen and select "R Markdown".
+
+![Rmd Screenshot](../../img/new_Rmd.png)
