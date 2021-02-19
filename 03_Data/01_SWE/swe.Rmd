@@ -1,0 +1,12 @@
+---
+title: "Snow-Water Equivalent | Spatial Covaritates Workshop"
+author: "Brian J. Smith"
+date: "February 22, 2021"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+css: ../../my.css
+---
+
+# SWE
