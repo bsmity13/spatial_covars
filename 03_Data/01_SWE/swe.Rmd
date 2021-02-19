@@ -10,3 +10,7 @@ css: ../../my.css
 ---
 
 # SWE
+
+---
+
+<a href = "../../index.html" class = "workshop-home">Workshop Table of Contents</a>

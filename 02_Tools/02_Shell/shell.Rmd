@@ -9,4 +9,7 @@ output:
 css: ../../my.css
 ---
 
+# System Shell
 Blah
+
+<a href = "../../index.html" class = "workshop-home">Workshop Table of Contents</a>

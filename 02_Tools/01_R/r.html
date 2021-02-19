@@ -1339,7 +1339,7 @@ h6 {
 </style>
 
 
-<style type="text/css">img {margin: auto;display: block;}</style>
+<style type="text/css">img {margin: auto;display: block;}a.workshop-home:link {font-size: 150%;}a.workshop-home:visited {font-size: 150%;}a.workshop-home:hover {font-size: 150%;color: black;background: yellow;}a.workshop-home:active {font-size: 150%;color: black;background: blue;}</style>
 
 
 
@@ -1636,6 +1636,71 @@ Marwick et al. 2018 <em>The American Statistician</em>
 </div>
 <div id="interfacing-with-the-operating-system" class="section level2">
 <h2>Interfacing with the Operating System</h2>
+<p>Once you find yourself outside of R’s wheelhouse, you can reach out from R to other software. One of the easiest ways to do that is via the system <strong>shell</strong>.</p>
+<blockquote>
+<p>A shell is a computer program which exposes an operating system’s services to a human user or other program.</p>
+<footer>
+Wikipedia
+</footer>
+</blockquote>
+<p>The GUI (“gooey”; Graphical User Interface) that you interact with everyday when you start your computer is technically a shell, but most people (that I know) are referring to a CLI (Command Line Interface) when they say <strong>shell</strong>. You are probably aware of various CLIs, even if you don’t use them much.</p>
+<ul>
+<li>Windows
+<ul>
+<li>cmd.exe</li>
+<li>Windows PowerShell</li>
+</ul></li>
+<li>macOS
+<ul>
+<li>Terminal.app</li>
+</ul></li>
+<li>Linux
+<ul>
+<li>Bash</li>
+</ul></li>
+</ul>
+<p>Note that, for example, <code>bash</code> is a language that can be run by a CLI program. Both Windows and Mac have programs that can run <code>bash</code>, but <code>bash</code> is not the default command language in either operating system. (Mac moved from <code>bash</code> to <code>zsh</code> by default in 2019).</p>
+<p>This is not a comprehensive lesson on using a CLI, but we will be writing some shell code today. If you’re interested in learning more, I’d point you to the Software Carpentry lesson on <a href="https://swcarpentry.github.io/shell-novice/">The Unix Shell</a>.</p>
+<p>This will be, perhaps, the trickiest part of this workshop since the exact syntax and results will vary from platform-to-platform. Unfortunately, I have <em>very</em> little experience with macOS, so we might find it difficult to troubleshoot problems with the shell on Mac, and I apologize in advance for having only Windows-specific examples. I’ll try to generalize as much as I can.</p>
+<p>For now, suffice it to say that we can pass shell commands to the system from R with the R function <code>shell()</code> on Windows or <code>system()</code> on Mac. For example, in Windows, the command <code>dir</code> prints the directory contents. Here’s what I get if I run this from R.</p>
+<pre class="r"><code>shell(&quot;dir&quot;)</code></pre>
+<pre><code> Volume in drive C is Windows
+ Volume Serial Number is 6EF3-113E
+
+ Directory of C:\Users\bsmit\Box Sync\PhD\Data\Spatial Covariates\02_Tools\01_R
+
+02/18/2021  06:01 PM    &lt;DIR&gt;          .
+02/18/2021  06:01 PM    &lt;DIR&gt;          ..
+02/18/2021  04:58 PM                68 .Rhistory
+02/18/2021  05:08 PM               218 01 R.Rproj
+02/18/2021  06:01 PM         1,031,109 r.html
+02/18/2021  06:01 PM             9,632 r.Rmd
+               4 File(s)      1,041,027 bytes
+               2 Dir(s)  426,831,962,112 bytes free</code></pre>
+<p>If you’re on Mac, try this:</p>
+<pre class="r"><code>system(&quot;ls&quot;)</code></pre>
+<p>I think your results should be similar.</p>
+<p>R has good built-in utilities for doing things like printing out directory contents (see <code>?dir</code>), so we won’t be relying on the shell for that. Instead, we’ll be relying on the shell to call other programs or open other files on our computers. We’ll see this in the next module.</p>
+<p>The last thing we’ll talk about here is letting the operating system decide how to handle a file. Your system has defaults for what program to use when it encounters a particular file type. If you call a file with the shell, the system will look-up the default program and then use it to open that file. On Windows, you will need to use the R function <code>shell.exec()</code> to make sure the OS looks up the file extension. On Mac (or Linux), <code>system()</code> should still do the trick.</p>
+<p>Let’s see two examples: (1) a webpage and (2) an image.</p>
+<ol style="list-style-type: decimal">
+<li>Anytime your OS sees a file path starting with <code>&quot;https://&quot;</code>, it will know to use your web browser to open it.</li>
+</ol>
+<ul>
+<li>On Windows: <code>shell.exec(&quot;https://www.github.com&quot;)</code></li>
+<li>On Mac: <code>system(&quot;https://www.github.com&quot;)</code></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>As opposed to <code>&quot;https://&quot;</code>, paths to files will start with <code>&quot;file:///&quot;</code>. This is not necessary if you’re using a relative path to call a file (in an up-to-date version of R). In this R Markdown’s current directory, there is an image called <code>&quot;happy.png&quot;</code>. Let’s open it.</li>
+</ol>
+<ul>
+<li>On Windows: <code>shell.exec(&quot;happy.png&quot;)</code></li>
+<li>On Mac: <code>system(&quot;happy.png&quot;)</code></li>
+</ul>
+<p>You should hopefully see this smiling face!</p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVQAAAE7CAIAAAANUu5tAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABsXSURBVHhe7ZNhuqy6bgUzgsx/ShnVS9+7S4lZQLcNBiyz6qs/5+zG1pKl//qPMeaVePmNeSlefmNeipffmJfi5Z+H/+oEx5nZ8UsngwV9CIowU+DnHBcWbngo12TDLzcKbNIUEMmMjd/pSdiVqSGqGQ+/zd2wExfwn//57y5y3AXQAjMGfo87YPZ7IIt6sxTRA1pjnsNvcCGM+VFk8YaVck9Av8y9uO/9YaLbkaVKKmHaoX3mLtzxbjDCjcjmzCc5W6Ch5mLc6LMwsNXIbrxKWlANLTbX4P4ehPGsQ3bAfqQ1ddB00xW3tQ2GsQ4Zd7spzaqDZzA9cDdrYfoqkOG2ldK+CngScw738TdM3C9klO1haegveB5zFHfwG0zZL2R2bS/p71d4KtOOe7cNk/UVmVR7kbT7KzybacFdW8Ao/UKm094j3f8KD2kqcLOA2fmKzKJ9RB7jKzyq+Yrb9A+MzD4yf/ZxeZh9eFqzz9t7xKTsIzNnh5JH2odnNlu8tztMxz4yZ3ZYebB9eHKz5I19YSJ2kMGyieQJd+D5TfC6jjAIO8gw2XTykDswBOZfXtQO3n8HmSGbWh51Bwbi9byiEbz5DjI3dhp54B0Yjhczfwt46i1kVuyU8thbMCJvZeb8vPAOMiJ2YnnyHRiX9zFtch52C5kM+xJ5/i0YmpcxYWzecwuZBvtCGYUtGKDXMFtgnnELGQL7WhmILRijdzBVWh5whby9tR8Zji2Yp9mZJCePtoU8ubX/JyOyBYM1NTOE5LlWyEtbuynjsoLxmpfcCXmlLeSBrf0iQ7MFozYjibPxOCvkXa2tlAFawcBNR9ZgPMsKeU5rm2SMVjB2c5EyFQ+yQh7S2gMyTCsYvonIF4mnWCLvZ+1JGawljOAsJMvDIyyRZ7O2i4zXCmYxP2mS0PgV8mDWdpQhW8FQJidHDFq+Qp7K2u4yaisYzcwkyECzV8gjWXuRDNwKBjQtowegzSvkeay9WiZvCWOak6Grp8FL5EmsvU1GcAnDmpBxS6e1S+QxrL1ZBnEJI5uNQeumqUvkGax9RMZxCYObihGLpp1L5AGsfVCGcgnjm4fhKqaRS6T11j4uo7mEIU7CWOXSwiXSdGsHkQFdwihnYKBaad4Sabe1Q8mYLmGgh2eUQmnbEmm0tQPKsC5hrMdmiCpp2BJpsbXDysguYbgH5vkSadUSaa61g8vgLmHER+Xh+mjSEmmrtSlkfJcw6EPyZHG0Z4k01NpEMsRLGPfxGGv5pZXWppNRLmDcx+OxymhMgTTR2qQy0AUM/WA8UxYtKZD2WZtaxrqA0R+JB2qiGUukd9Zml8kuYAGG4e6CaMMS6Zq1E8hwL2ENxuD55ZeWTSYhd5Af28nkmQtYgzG4tRoaUCDNmkbiNSKHTCyBd5Afp5ZIBSzDANxXCtELpE0TSLBzyJkzScJG5JB0EqOAlXiam+og9BLpUWqJ1A85P7VEOoecmUgCLGExHuWOIoi7RBqUV/Jcg9yVTmL0Q87PItUvYT2e45nll9YklTC/oAtb8ItfyL0ppPRrkLtSSOkFDMFzXF4BQQukKUklzA6Eb4Evd5DbR5aKf0HsLfjFL+Te8aXuAgI/xLXXE7FA2pFUwmxB8qNwyhZSw5hS6w6EbIEvd5Dbx5e6C8j5BF7+Zkmygsw94MQVUsloUuUWBDsKp2whNQwuRReQ8AkuvJtwBdKIdBJjBYF7w+krpKpBpLgVhOkBJ66QSgaXoguIdzv3Da60IKMkWULga+COJVLV41LWCjL0htNXSFUjS8UFZLsXL3+txFhC2ivhpiVS27NS0xKqvwbuWCJVjSwVFxDsXi65lUAFEj6dxFhC2uvhviVS4VNSzRLqvhJuWiK1jSwVFxDsRu5YfomdTmIsIepdcOsSqfN+qWMJFV8P9y2RCkeWigsIdhf97yNHgWTOJRmWEPVeuHuJVHunVLCEWu+CW5dIncNKuQWkuovO9xGiQALnkgxLiPoEVLBEar5H7l5ClffC3Uuk2mGl3AJS3YKX/5tkKCDnc1DHEin7arl1CfU9ARUskZqHlXILSHU9PW+i9gLJmUsyFJDzaaimQCq/Wm4toLLnoI4lUvaYUmsBka6n200UXiAhc0mGAnKOATUVSP3XyX0F1PQ0VFMglQ8r5RYQ6WK8/NuSoYCcY0BNBVL/RXJZAQWNATUVSP3DSrkBeS6mzzWUXCDZckmGAnKOBJUVSIor5KYCqhkDaiqQ+oeVcguIdCVe/g3JEBByPKgvkBTd5ZoC6hgJKiuQFMNKuQF5rqTDHRRbIKlySYYCco4H9RVIlr5yR0AR40F9gaQYVsotIM9lePkXEqCAkKNClQWSqJecXkAF40F9BZJlWCk3IM9lnL2AMgskTy7JUEDOUaHKAknURY4u4PpRocoCSTSm1FpAnmvovPwSJp3ECAg5NtQaSKIucnQBd48KVRZIomGl3IA813DqdAoskCS5JEMBOceGWgsk13k5N+DisaHWQBINK+UWkOcCei6/xEgnMQJCZoCKA8l1Ug4t4NaxodYCyTWslBuQ5wKOH01pBZIhl2QoIGcGqLhA0p2REwOuzAAVB5JrWCm3gDy96bb8EiCdxAgImQfqDiTdYTmugPsyQMUFkm5YKTcgT28OnktRBVJ9OokRkDMP1B1IusNyXMBleaDuQNINK+UWkKcrfZZfSk8nMQrImQfqLpCMx+SsgMvyQN2BpBtZKg7I0xUv/z8SIyBkNqg+kIwH5KACbsoDdRdIxmGl3IA8XTlyKOUUSN3pJEZAzmxQfSAZD8hBAddkg+oDyTiyVByQpx8dll8qTicxCsiZDaovkKStckrANdmg+kAyjiwVB+TpR/OJFFIgFaeTGAE5c0KGQJI2yREF3JENqi+QpMNKuQVE6sTZ5ZdyM0qSgJw5IUMgSZvkiIALckKGQJKOLBUH5OmEl99Tvi1HBFyQEzIEknRkqTggTyfajqOEAqk1oyQJiJoTMgSStEmOCLggJ2QIJOnIUnEBkXpwavml0IySJCBnZkgSSN56+T7g9JyQIZCkg0vRAZF60HAWlxdIlRklSUDUzJAkkLyV8nHA0ZkhSSB5R5aKC4h0muPLLyUmlTABUTNDkkDyVsrHAUdnhiSB5B1cig6IdBov/wKiZoYkgeStlI8Djs4MSQLJO7gUHRDpNLUHcW2B1JdUwgSkvQbuWMGfO8GhgeStlI8Djs4MSQLJO7gUXUCqcxxcfikur+QJSNsJDm2Ej4/CKQUSuUa+DDj6GrhjBX/uBIcGknd8qTsg1TlqT+HOQCpLKmECovaAE0/AQYfgiEBS18iXAed2gkMb4eOjcEqBRB5cig5IdY6qU7iwQCpLKmEC0p6DszrBoY3wcSCpf8pnAYf2gBNPwEGH4IhAUg8uRReQ6gRVR3BbIGXllTwBaY/CKRfABdXwWSCpf8pnAYeeg7M6waGN8HEgqceXugNSnaDqCG4LpKa8kicgbTt8fzFcVgEfBJL6p3wWcOhROOUCuKAaPgsk9fhSd0CqE1QdwW2B1JRX8gSkbYSPb4Erf8GvA0n9Uz4LOLQdvr8YLquADwJJPb7UHZDqBL+P4KoCqSmv5AkI3AJf3ggXf4WfBpL6p3wWcGgjfHwLXPkLfh1I6hRSekCwo/z+nnsCqSa1RAoIXA2f3Q7X78PvAkn9Uz4LOLQFvrwRLv4KPw0kdQopPSDYUS6fpJElUkDgOvjmIShiB34USOqf8lnAodXw2e1w/T78LpDUKaT0gGBHeUXL9iRSQOAK+OBRKGULfhFI6p/yWcChdfDNQ1DEDvwokNQppPQCsh1i/n59kVQBmSvgg6ehmhX8OZDUP+WzgEMr4INHoZQt+EUgqbNI9QHZDvHjY24IpI7skiog8y/49QBQ0Ar+HEjqn/JZwKEV8MHTUM0K/hxI6ixSfUC2Q/z4mBsCqSO7pArI/BV+OgyUtYS/BZL6p3wWcOgv+PUAUNAK/hxI6ixSfUC2Q3z7mOMLpI7skiog9j78bjAoroA/BJL6p3wWcOhX+OkwUNYS/hZI6ixSfQHx2vn2JWcHUsQEEiwg9j78bjAoroA/BJL6p3wWcOg+/G4wKK6APwSSOpEECIjXzrcvOTuQCiaQYAGxd+BHQ0KJAf8bSOqf8lnAofvwu8GguAL+EEjqRBIgIF47377k7EAqmEOyBSTfgl8MCSUG/G8gkX/KZwGH7sCPhoQSA/43kNSJJEBAvHYaxl0qmEOyBSRfwZ8HhkI7vRofBxy9Bb8YEkoM+N9AIieSAAHx2mkYd6lgDskWEH4Ffx4YCu004nwccPQK/jwwFNqpLeNIjICQjdS+q9w9jcQLCL+CPw8MhXZ6OD4OOHoFfx4YCp1unokRELKR2neVu6eReAHhl/C34dmsVvJWysfB38lr+PPAUOh080yMgJCN1L6r3D2NxCsgfwF/GJ7NaiVvpXwc/J0s8Lfh2axW8qaTGMFfxlZ2P+PUQO6eSRIG5C/gD8OzLlWS1sv3BX+tKOEPw7NZreRNJzGCv4yt7H7GqYHcPZMkDMhfwB+GZ12qJG2SI4K/VpTwh+FZlypJM0qS4O9FWtn+jCMDuXgyCRnQggL+kBBJ2iRHBPSigD8Mz7pUSZpUwgR/j9KEl/9HE/nfnEjSJjkioB0F/CEhkjSphAl4lRa8/NrED3ThX/ivnEjSJjkioB0B/5sTSZpUwgQ8TAte/n8kZ0AX/oX/SohkbJVTCujIv/BfOZGkSSVMwMO04OX/R3IGdOFf+K+ESMYDclBAR/6F/0qIZMwreQIepgUv/z+Ss4BGePkL6Mi/8F8JkYx5JU/Aw7Tg5UeiBjQi7ZRLumNyVgFN8fIPIHkCHqYFLz8SNaAR717+jxwX0JTXt2UEiRTwMC14+ZGoBZutyIKkOyzHBX89+cC/syHpUkukgIdpYeMbDgvkyoklcLDZjRRIrjNyYkHetnyQdNklVfD3NPV4+f9fAhdsNmR8JNdJOTRI2pMPkmsCCRb8PU09Xv6FZA42GzI4kui8nFuQsS0fJNcEEiz4e5d6vPwLyVywbsjgSKIucnSwOSeDI4nmkGzB37vU4+VfSOaCdUMGRxJ1kaML3JYRJFvw7/o24OVXiZ0TydJLTi9Yz8ngSKI5JFvwt7/1ePk3JHmw/p9hKVP0lQtyIlmmkXgBC1yNl39DkmdDUnSXa4L1/wxLmWImiRewwNV4+bclfB6k/ivkpmxIipkkYcACV+Pl35bweZD6L5LL8iD1TyYhAxa4Gi//ruTPgFR+ndyXB6l/MgkZsMDVePm/SQuGR8q+VK7MgFQ+n+QMWOBqvPzfpAVjIzXfIBcPj5Q9n+QMWOBqvPw/pAujItXeI3ePjdQ8pUQNWOBqvPy/pRHjIXXeKRWMilQ7q6QNWOBqvPxV0ovBkCJvliLGQ+qcWAIHLHA1Xv5aaccwSHmPSCmDIUVOLIEDFrgaL3+DdGQApLAHpaBhkPLmlswBC1yNl79BOvI0UtXjUtYASGHTS+yABa7Gy98sfXkIKWYEqexppKo3SPKABa7Gy39EWnM7UsZQUuJDSDEvkfABC1yNl/+gdOdGpIABpdDbkTLeI/kDFria7Q84LJAr7Z9053rk3pGl4huRAl4lLfgXVrcFL/9Z6dE1yF0ppPTrkXvfJl0IWN0WvPx9pFNdkStySYZrkLveKb0IWN0WvPw9pV/nkDNTS6SuyBWvlXYErG4LXv7+0rV25JxpJN455ExLXwJWtwUv/7XSwX3k9xNL4HbkHPsn3QlY3Ra8/PYBGax95Pd2LZ0KWN0WvPzWppTlDFjdFrz81qaU5QxY3RZ2v+HIQC621j4oaxmwtI14+a3NJ2sZsLSNePmtzSdrGbC0jXj5rc0naxmwtI14+a3NJ2sZsLSNePmtzSdrGbC0jXz7jIMDud5a+4gsZMC6tuPltzaZLGTAurbj5bc2mSxkwLq24+W3NpksZMC6ttOw/B+kCGvtzbKKBaxrOz++5PhA6rDW3iyrGLCoh/DyW5tJVjFgUQ+RafkpIpC/WvsGmf6ART1E2/J/kFJuk+uXyG+snVvmvoBFPcTvj7kkkGpuk+tXyM+snViGPmBFj+LltzaNDH3Aih6lefk/SEH3yN1byC+tnVUmPmBFj1L1PVcFUtA9cvcO8mNr55NZD1jOE6RZ/o9cv4P82NrJZNADlvMEXn5rc8igByznCY4s/wcp6za5fgf5sbUjyHQG8tdK+biA5TxB7RFcGEhld0oFO8iPrX1W5nKJ/KZGvgxYy3PkW/6PFLGD/Njap2QiV8jPauTLgLU8x8Hl/yDF3SkV7CA/tvZ+mcUd5Mc/5bMC1vIcDadwbSD13SxF7CA/tvZOmcJ95Pc/5bOAhTxN1uX/SB07yI+tvUfm7yvyyU/5LGAhT3N8+T9IifdLHTvIj629WibvK/LJT/msgIU8TdtBXB5IlfdLHfvI7629TmbuK/JJjXwZsIo9OLX8H6TQ+6WOfeT31l4h0/YV+aRGvixgFXvQfBYlBFLrI1LKPvJ7azvKkP1CvqqUjwOWsBMzLP9HqtlBfmxtL5mwX8hX9fJ9wBJ24uzyf5Byn5JqdpAfW3teZusX8lW9fF/AEnbiyHEUEkjFT0k1+8jvrT0jU/UV+aRVTglYv350WP4PUvRTUs0+8ntrD8gw/UK+OiAHBaxfPw6eSDmBFP2gFLSP/N7aJhmjX8hXB+SgAnavH7Mt/0dq2kd+b22lDNAv5KtjclbA4nWlz/J/kNKflZr2kd9b+13m5hfy1WE5roDF68rxQykqkOofl7L2kd9buycT8wv56oycGLByvem2/B8kwONS1j7ye2tFBqUC+fCMnFjAyvXm1LmUFkiGEaSyr8gn1v7JfFQgH56UQwOW7QJ6Lv8HiTGCVPYV+cRaJuMX8tV5ObeAZbuAs0dTYCBJBpHiviKf2NfKQFQgH3aRowPW7Bo6L/8HCTOIFPcV+cS+UEahAvmwixxdwJpdQ4fTKTOQPONIfV+RT+x7ZAIqkA87ygUBC3YZ/Zf/g0QaR+r7hXxl55ZXr0O+7SgXFLBgl9HnAooNJNVQUuIv5Cs7q7x3BfJhd7kmYLWu5JLl/yDBhpISfyFf2cnkmeuQb7vLNQWs1pV0u4OSA8k2oBT6FfnEziGvW4d8e5FcFrBUF3PV8n+QeANKob+Qr2xqedQ65NuL5LIClupiel5D4QUSckAp9Bfylc0ob1mHfHud3FfAOl1P55soP5CcY0qtFciHNou8XzXy+aVyZQG7dD3XLv8HiTqslPsL+coOLs9WjXx+tdxawCLdQv/LCFEggYeVciuQD+2A8lQtyAlXy60FrNBdePkXUnEd8q0dRJ6nBTnhHrm7gBW6i0vuI0qBxB5ciq5APrTPyqu0ICfcJtcXsDw3ctWVBCqQ8INL0XXIt/Z+eYlG5JDb5PoC1uZevPzfpPQ65Ft7j3S/ETnkZimigLW5lwtvJVaBtCCFlF6NfG6vk443IofcL3UUsDC3c+3FhCuQRmSR6quRz21HaXE7cs4jUkoBq/IEXv5aCdCCnGBPSlvbkXMelIIKWJUnuPxuIhZIO3JJhhbkBHtAWtmOnPOs1FTAkjzEHdcTtECakk5iNCKH2J/SuEPIUY9LWQWsx3M8s/wfpDXpJEY7co5dS6eOIqeNIJUtYT2e46YKiLtEGpRRkhxCjrL05QRy4DhSXwGL8Sj3FUHoAmlQXslzFDntbdKFc8iZQ0mJBazE09xaB9ELpE2pJdIJ5MCJJfBp5NgBpdAClmEA7i6FBhRIs7JLqnPImdNIvB7IyWNKrUvYhAF4fvk/SMsmkGA9kJNzSYauyBXDSrlLWIMxeKAa2lAgXZtJEvZDzh9NqrwAuWh8qbuABRiGZwqiGQXSuMkk5AXIRTdLEVciN2aR6gsY/ZF4rCZaUiDtm1KiXo/ce17OvQu5PZdkKGDoB+PJsmhMgTRxVklrVkijMkqSJUz8YIy1/B+kldNL7HcjPckreZYw7uPxcGW0Z4k09CUS/k1IB7JLqiUM+pA8XxxNWiJtfZW0YFIk7DQSbwkjPipD1Eerlkhz3ym9yIwkmlKiLmG4B2aUEmnYEmmxpS9jIzVPL7GXMNZjM1CVtG2JNNqKtOk5pJ63SReWMNDDM1ahNG+JtNvWSO86IYfbP+nOEkY5A8PVSguXSNOtfVxGcwlDnIQRy6WRS6T11j4oQ7mE8c3DoBXTziXyANY+IuO4hMFNxbhF09Ql8gzW3iyDuISRzcbQddPaJfIY1t4mI7iEYU3I6KXT4CXyJNbeIMO3hDHNSYLqafMKeRtrr5OZW8KApiVHAJq9Ql7I2u4yaisYzcykyUDLV8hTWdtRhmwFQ5mcTDFo/Ap5MGu7yHitYBzzky8JL7BEns3akzJYSxjBWUiZh6dYIe9n7TGZpyUM30RkjcSDrJBXtLZJxmgFYzcXiVPxLCvkOa2tlAFawcBNR+5gPM4W8q7WfpGh2YJRm5EZsvFKK+SBrd2UcVnBeM3LJAl5ri3kpa39PxmRLRisqZknJI+2hTy5tR8Zji0YqdmZLSevt4W8vX2zzMQKxugdTJiWZ9xCJsC+UEZhCwboNUwbmPfcQqbBvkSefwuG5mXMHJuH3UEmw84tr74F4/I+5k/OC28h82GnlMfeghF5K6/Iz1PvILNip5EH3oHheDEvagFvvoPMjU0tj7oDA/F6XtcI3n8HmSGbTh5yH+bAvHD5PzAFO8gw2UTyhDvw/CZ4b0eYiH1ksOzI8mY78ORmydv7wnTsI0Nmh5JH2odnNlu4O//ApOwjM2cfl4fZh6c1+7hHwMh8RebPPiKP8RUe1XzFbVrA7HxFZtHeJg/wFR7SVOBmbcAc/UJG014k7f4Fj2eqccu+wVh9RSbVdpQWf4WnMu24d79hyn4hg2sPS0N/wfOYo7iDtTBxFcgo20ppXwU8iTmH+9gG01eHDLfdlGbVwTOYHribB2EY65Bxtx9pTR003XTFbT0L41mN7MCrpAXV0GJzDe5vNxjYFmQ3ppSoLdBQczFudGeY30PI2uSVPO3QRHMLbvdVMM4nkI0aVso9AS0z9+K+Xw4D3glZvJuliB7QHfMcfoO7YfZ7I1t6Ug7tDS0wY+D3eBJ2YmqIasbDbzMK7MoUEMmMjd9pXNik4aFckw2/XDJYuIegCDMFfs5JYDs7waFmavzMxrwUL78xL8XLb8xL8fIb81K8/Ma8FC+/MS/Fy2/MS/HyG/NSvPzGvBQvvzEvxctvzEvx8hvzUrz8xryS//znfwEypDw6Q4Q4bQAAAABJRU5ErkJggg==" width="170" /></p>
+<hr />
+<p><a href="../../index.html" class="workshop-home">Workshop Table of Contents</a></p>
 </div>
 
 

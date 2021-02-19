@@ -3,3 +3,23 @@ img {
 	margin: auto;
 	display: block;
 }
+
+a.workshop-home:link {
+	font-size: 150%;
+}
+
+a.workshop-home:visited {
+	font-size: 150%;
+}
+
+a.workshop-home:hover {
+	font-size: 150%;
+	color: black;
+	background: yellow;
+}
+
+a.workshop-home:active {
+	font-size: 150%;
+	color: black;
+	background: blue;
+}

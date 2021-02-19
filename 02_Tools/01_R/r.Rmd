@@ -131,3 +131,83 @@ devtools::install_packages("bsmity13/LoCoHverlap")
   (Of course, make sure you have the `devtools` package already installed!)  
   
 ## Interfacing with the Operating System
+
+Once you find yourself outside of R's wheelhouse, you can reach out from R to other software. One of the easiest ways to do that is via the system **shell**.
+
+> A shell is a computer program which exposes an operating system's services to a human user or other program.
+>
+> `r tufte::quote_footer("Wikipedia")`
+
+The GUI ("gooey"; Graphical User Interface) that you interact with everyday when you start your computer is technically a shell, but most people (that I know) are referring to a CLI (Command Line Interface) when they say **shell**. You are probably aware of various CLIs, even if you don't use them much.  
+
+  * Windows
+    - cmd.exe
+    - Windows PowerShell
+    
+  * macOS
+    - Terminal.app
+    
+  * Linux
+    - Bash 
+    
+Note that, for example, `bash` is a language that can be run by a CLI program. Both Windows and Mac have programs that can run `bash`, but `bash` is not the default command language in either operating system. (Mac moved from `bash` to `zsh` by default in 2019).
+
+This is not a comprehensive lesson on using a CLI, but we will be writing some shell code today. If you're interested in learning more, I'd point you to the Software Carpentry lesson on [The Unix Shell](https://swcarpentry.github.io/shell-novice/).
+
+This will be, perhaps, the trickiest part of this workshop since the exact syntax and results will vary from platform-to-platform. Unfortunately, I have *very* little experience with macOS, so we might find it difficult to troubleshoot problems with the shell on Mac, and I apologize in advance for having only Windows-specific examples. I'll try to generalize as much as I can.
+
+For now, suffice it to say that we can pass shell commands to the system from R with the R function `shell()` on Windows or `system()` on Mac. For example, in Windows, the command `dir` prints the directory contents. Here's what I get if I run this from R.
+
+```{r shell dir, eval = FALSE}
+shell("dir")
+```
+```
+ Volume in drive C is Windows
+ Volume Serial Number is 6EF3-113E
+
+ Directory of C:\Users\bsmit\Box Sync\PhD\Data\Spatial Covariates\02_Tools\01_R
+
+02/18/2021  06:01 PM    <DIR>          .
+02/18/2021  06:01 PM    <DIR>          ..
+02/18/2021  04:58 PM                68 .Rhistory
+02/18/2021  05:08 PM               218 01 R.Rproj
+02/18/2021  06:01 PM         1,031,109 r.html
+02/18/2021  06:01 PM             9,632 r.Rmd
+               4 File(s)      1,041,027 bytes
+               2 Dir(s)  426,831,962,112 bytes free
+```
+
+If you're on Mac, try this:
+
+```{r mac system, eval = FALSE}
+system("ls")
+```
+
+I think your results should be similar.
+
+R has good built-in utilities for doing things like printing out directory contents (see `?dir`), so we won't be relying on the shell for that. Instead, we'll be relying on the shell to call other programs or open other files on our computers. We'll see this in the next module.
+
+The last thing we'll talk about here is letting the operating system decide how to handle a file. Your system has defaults for what program to use when it encounters a particular file type. If you call a file with the shell, the system will look-up the default program and then use it to open that file. On Windows, you will need to use the R function `shell.exec()` to make sure the OS looks up the file extension. On Mac (or Linux), `system()` should still do the trick.
+
+Let's see two examples: (1) a webpage and (2) an image.
+
+  1. Anytime your OS sees a file path starting with `"https://"`, it will know to use your web browser to open it.  
+
+  - On Windows: `shell.exec("https://www.github.com")`
+  - On Mac: `system("https://www.github.com")`
+    
+  2. As opposed to `"https://"`, paths to files will start with `"file:///"`. This is not necessary if you're using a relative path to call a file (in an up-to-date version of R). In this R Markdown's current directory, there is an image called `"happy.png"`. Let's open it.  
+  
+  - On Windows: `shell.exec("happy.png")`
+  - On Mac: `system("happy.png")`
+    
+You should hopefully see this smiling face!
+
+```{r happy, echo = FALSE}
+knitr::include_graphics("happy.png")
+```
+
+
+---
+
+<a href = "../../index.html" class = "workshop-home">Workshop Table of Contents</a>

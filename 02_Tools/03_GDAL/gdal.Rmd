@@ -9,4 +9,6 @@ output:
 css: ../../my.css
 ---
 
-Blah
+# GDAL
+
+<a href = "../../index.html" class = "workshop-home">Workshop Table of Contents</a>
