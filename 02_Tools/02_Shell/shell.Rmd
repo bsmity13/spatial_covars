@@ -9,7 +9,163 @@ output:
 css: ../../my.css
 ---
 
-# System Shell
-Blah
+## System Shell
+
+This is not a comprehensive lesson on using a command line interface (CLI), but we will be writing some shell code today. If you're interested in learning more, I'd point you to the Software Carpentry lesson on [The Unix Shell](https://swcarpentry.github.io/shell-novice/).
+
+This will be, perhaps, the trickiest part of this workshop since the exact syntax and results will vary from platform to platform. Unfortunately, I have *very* little experience with macOS, so we might find it difficult to troubleshoot problems with the shell on Mac, and I apologize in advance for having mostly Windows-specific examples. I'll try to generalize as much as I can.
+
+## Getting Started
+
+Start by opening your favorite command line interface.
+
+*But Brian, I don't have a favorite command line interface.*
+
+Neither do I. I have done a bit of dabbling, but I mostly use Window's default, `cmd.exe`, even though I have PowerShell and Git bash ready to go. `-1 nerd point` for me `r emo::ji("thumbs down")`
+
+If you don't have a favorite, either, open the default:  
+
+  * Windows: `cmd.exe`
+  * macOS: `Terminal.app`
+  
+(If you do have a favorite, you probably don't need this module.)
+  
+If you start `cmd.exe` it should look something like this:
+
+`r knitr::include_graphics("../../img/cmd_start.png")`
+
+If you start `Terminal.app`, it should look something like this:
+
+`r knitr::include_graphics("../../img/terminal_start_web.png")`
+
+Besides the monotype font, they look pretty different (and I'm not talking about the background color!) 
+
+The `cmd.exe` prompt tells you what directory (folder) you are in. Mine says `C:\Users\bsmit>`. The `C:` indicates which "drive" I'm working on, which can be a physical drive (like a hard drive or a DVD drive) or a virtual drive (like a network location). By convention, `C:` always refers to the primary hard drive on a PC. (Fun fact, `A:` and `B:` were both reserved for floppy disk drives). Then comes the BACKSLASH. Windows is weird in that it is the only major operating system that uses the backslash (`\`) instead of the forward slash (`/`) to separate directories. `Users\bsmit` means I'm in a folder on my `C:` drive that is called `Users` and then a folder inside that called `bsmit`. On Windows, this folder is tied to your "user profile". Finally, the `>` signals the end of the prompt, *i.e.*, that's where you start typing commands.
+
+The `Terminal.app` has some slightly different information. The example I downloaded from the internet says `MacBook-Pro-9:~ helloigor$` (the rest is a command). The first part is the machine you are connected to, most likely your local machine. In this case, it is called `MacBook-Pro-9`. The colon comes next, and then the directory (folder). On Unix-like systems (macOS and Linux), the tilde (`~`) refers to your root directory, or the base directory from which you navigate to all other directories on your machine. The next bit (here, `helloigor`) is your username, and the `$` indicates the end of the prompt, *i.e.*, that's where you start typing commands.
+
+Recall from the last module that there is a command to print out the contents of a directory. On Windows, type `dir` and on Mac type `ls`. Then press `Enter`.
+
+## Getting Around
+
+What if we want to go somewhere else? In both command lines, we can use `cd` to **c**hange **d**irectory. We can then type either a **full path** or a **relative path**.
+
+Say I am in a directory on my Windows machine called `C:\User\bsmit`. I print out my directory and I see a folder in my current location called `Documents`. The **full path** to the `Documents` folder is `C:\User\bsmit\Documents`, but relative to my current location, the path is simply `Documents`. As long as I am currently in `C:\User\bsmit`, I can get to documents by using `cd` and the **relative path**:
+
+```{bash cd rel, eval = FALSE}
+C:\Users\bsmit> cd Documents
+```
+
+```
+C:\Users\bsmit\Documents>
+```
+
+This is way more convenient than typing out the **full path**, but if I'm in a completely different directory, perhaps the **full path** will be more appropriate. *No matter where I am on my computer*, I can get back to documents with:
+
+```{bash cd abs, eval = FALSE}
+C:\Windows\System32> cd C:\Users\bsmit\Documents
+```
+```
+C:\Users\bsmit\Documents>
+```
+
+Now say I am in `C:\Users\bsmit`, and I want to get to my R library at `C:\Users\bsmit\Documents\R\win-library\4.0\`. If I want to use a relative path, I can do it all at once, or one folder at a time (which might be useful if I don't know exactly where I'm going and I need to print the directory contents each time). Either approach will work:
+
+```{bash cd once, eval = FALSE}
+C:\Users\bsmit> cd Documents\R\win-library\4.0
+```
+
+```
+C:\Users\bsmit\Documents\R\win-library\4.0>
+```
+
+OR
+
+```{bash cd steps, eval = FALSE}
+C:\Users\bsmit> cd Documents
+C:\Users\bsmit\Documents> cd R
+C:\Users\bsmit\Documents\R> cd win-library
+C:\Users\bsmit\Documents\R\win-library> cd 4.0
+```
+
+```
+C:\Users\bsmit\Documents\R\win-library\4.0>
+```
+
+If I want to go up a level (to the parent directory), I can type `cd ..`. If I want to go up two levels, I can type `cd ..\..`.
+
+```{bash up one level, eval = FALSE}
+C:\Users\bsmit\Documents\R\win-library\4.0> cd ..
+```
+
+```
+C:\Users\bsmit\Documents\R\win-library>
+```
+
+```{bash up two level, eval = FALSE}
+C:\Users\bsmit\Documents\R\win-library> cd ..\..
+```
+
+```
+C:\Users\bsmit\Documents>
+```
+
+**Full paths** and **relative paths** are fundamental concepts in computing, relevant to us whether we are working with R, from the command line, or in countless other contexts.
+
+## Running Programs
+
+Now that we know how to get around, how do we run a program? Well, we can navigate to the program's directory and then type the program's name. This would be calling the program using its **relative path**. For example, I can run R from the command line:
+
+```{bash run R rel, eval = FALSE}
+C:\Users\bsmit> cd C:\Program Files\R\R-4.0.3\bin
+C:\Program Files\R\R-4.0.3\bin> R.exe
+```
+
+We can also call programs using their absolute path *without* changing directories.
+
+```{bash run R abs, eval = FALSE}
+C:\Users\bsmit> C:\Program Files\R\R-4.0.3\bin\R.exe
+```
+
+We'll see why this is useful later.
+
+### The System PATH
+
+What if, for example, we needed to run R often from different directories? We might get pretty tired of typing `C:\Program Files\R\R-4.0.3\bin\R.exe` every time we need to run it.
+
+Your operating system has a list of directories where commonly used programs live. That list is called the system PATH (usually written in all caps to distinguish from the path to a resource). If your program's directory is on the PATH, you can omit the path when you call your program. For example, if `C:\Program Files\R\R-4.0.3\bin\` was on my system's path (it isn't), I could be anywhere on my machine and type:
+
+```{bash R path, eval = FALSE}
+C:\Users\bsmit> R.exe
+```
+
+The PATH is a convenient way for *other* programs to know where a resource lives. For example, if you're working in R on Windows and you want to build a package from source, R needs to know where `Rtools.exe` lives. It doesn't necessarily know how your computer is setup or what your directory structure looks like. But if the path to `Rtools` is on the PATH, it doesn't need to know. (Which is exactly why any of us using Windows had to add `Rtools` to the PATH when we installed it).
+
+You might want to know what directories are on your path. 
+
+On Windows: 
+
+```{bash win path, eval = FALSE}
+C:\Users\bsmit> PATH
+```
+
+```
+PATH=C:\Rtools\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Users\bsmit\AppData\Local\Microsoft\WindowsApps;C:\Users\bsmit\AppData\Roaming\TinyTeX\bin\win32;C:\Hugo\bin;
+```
+
+On Mac:
+
+```{bash mac path, eval = FALSE}
+$ echo $PATH
+```
+
+## Conclusion
+
+This is hardly even a basic introduction to the system shell, but hopefully it gives us the basics we need for this workshop. There are a variety of programs you can use to run a shell, but `cmd.exe` is the default on Windows and `Terminal.app` is the default on Mac. While they look different, they have similar functionality. Both shells use `cd` to change directories. Both shells use **relative paths** and **absolute paths**. And both shells use a variable called `PATH` to store common paths to programs (`.exe` or `.app`).
+
+The shell is very powerful, and if you can get some experience using it, you'll unlock a much more efficient way to interact with your computer.
+
+---
 
 <a href = "../../index.html" class = "workshop-home">Workshop Table of Contents</a>
+

@@ -13,7 +13,47 @@ css: ../../my.css
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Elevation
+## Elevation Data
+
+Finding high-quality (*i.e.*, accurate, precise, and high resolution) elevation data is much easier than finding high-quality SWE data, but you'll notice that many of the principles of data download and processing are similar across all raster data types. Part of that is because elevation is relatively constant over long time spans, while snow is patchy and ephemeral. 
+
+What we're mostly interested in will be digital elevation models (DEMs), as opposed to point-based elevation data you may have heard of like those from LiDAR.
+
+> USGS Digital elevation models (DEMs) are arrays of regularly spaced elevation values referenced horizontally either to a Universal Transverse Mercator (UTM) projection or to a geographic coordinate system. The grid cells are spaced at regular intervals along south to north profiles that are ordered from west to east.
+>
+> `r tufte::quote_footer("[USGS FAQ](https://www.usgs.gov/faqs/what-are-digital-elevation-models-dems)")`
+
+The U.S. Geological Survey is the Department of Interior's science support agency, and one important USGS program is known as the [3D Elevation Program](https://www.usgs.gov/core-science-systems/ngp/3dep) (3DEP). 3DEP is part of the larger National Map program, which provides all sorts of useful geospatial data covering the entire US (*e.g.*, political boundaries, rivers and streams, roads, etc.).
+
+Like the majority of public data sources, the National Map has a dedicated website for interactive data download. You can download National Map data, including DEMs, interactively from [this platform](https://apps.nationalmap.gov/downloader/#/).
+
+But of course, what we're really interested in for this workshop is a way to download DEMs programmatically and reproducibly for our analysis.
+
+## Downloading Data (the hard way)
+
+## Downloading Data (the easy way)
+
+### My functions
+
+As with the SWE data, I've compiled the workflow above into a few R functions for ease of use. It does seem to me like this is too small to really stand alone as a full-fledged R package, and it seems to me like one option would be to incorporate download functions for several datatypes together in one R package.
+
+But, alas, I'm not there yet. So you can grab this small set of functions from a mini R package on my GitHub. I would expect this package to be superceded in the near future, but any updates I make will be documented in the README for this package on GitHub.
+
+### Package `elevatr`
+
+I think I'd be remiss if I didn't mention an existing R package for downloading elevation data. The package `elevatr` has functions to download either raster or point elevation data from various sources. The primary developer, Dr. Jeffrey Hollister, works at the US EPA (U.S. Environmental Protection Agency). The package is available on [his GitHub](https://github.com/jhollist/elevatr), and it is mirrored on the [EPA's GitHub](https://github.com/usepa/elevatr).
+
+Based on my reading of the documentation, along with a few examples I've worked through, it seems to me that the data this package downloads is an amalgamation of several potential datasets, depending on the zoom/resolution. The interface reminds me of those for other web mapping services, such as leaflet, where you specify a centroid and a "zoom level" ranging from 1 -- 14. I think the package primarily queries Mapzen tiles stored on AWS servers, which may contain data from several providers.
+
+As a matter of personal preference, I'd rather download a single tile from a known data source, which is why I worked on the download functions that go directly to the USGS. But you should also be aware of `elevatr`, so let's briefly have a look at how it works.
+
+### Web Interface
+
+As I mentioned above, you can download data from the National Map [here](https://apps.nationalmap.gov/downloader/#/). *(But don't give in that easily! I promise that the effort to learn how to download the data programmatically is worth it!)*
+
+## Conclusion
+
+Compared to SWE, finding high-quality elevation data is a breeze. I recommend downloading DEMs from USGS's 3D Elevation Program. You can write some code for yourself, or use the functions I wrote. You may also be interested in using the R package `elevatr`.
 
 ---
 

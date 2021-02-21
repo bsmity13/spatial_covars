@@ -28,7 +28,7 @@ Most of us use `R` on a regular basis for our analyses, but there's a chance tha
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-This workshop has accompanying R Markdown HTML files for each section. You can also find the source code (*i.e.*, the `*.Rmd` file) used to create the HTML doc in each section's folder. You may find it easier to copy-and-paste from the source code than from the HTML file itself.
+This workshop has an R Markdown HTML file for each module. You can also find the source code (*i.e.*, the `*.Rmd` file) used to create the HTML doc in each module's folder. You may find it easier to copy-and-paste from the source code than from the HTML file itself.
 
 If you want to learn to use R Markdown on your own, it's easy to get started! RStudio's default template will set you up with everything you need to get started. From RStudio, click the "New File" button in the top left of your screen and select "R Markdown".
 
@@ -44,22 +44,22 @@ We're all familiar with R packages, but do we *really* know how they work? And d
 
 > The fundamental unit of shareable code
 >
-> `r tufte::quote_footer("Wickham and Bryan, *R Packages*")`
+> `r tufte::quote_footer("Wickham and Bryan, [*R Packages*](https://r-pkgs.org/)")`
 
 > Extensions to the R statistical programming language. [They] contain code, data, and documentation in a standardised collection format.
 >
-> `r tufte::quote_footer("Wikipedia")`
+> `r tufte::quote_footer("[Wikipedia](https://en.wikipedia.org/wiki/R_package)")`
 
->Packages provide a mechanism for loading optional code, data and documentation as needed. The R distribution itself includes about 30 packages.
+> Packages provide a mechanism for loading optional code, data and documentation as needed. The R distribution itself includes about 30 packages.
 >
 > A package is a directory of files which extend R.
 >
-> `r tufte::quote_footer("R Core Team, *Writing R Extensions*")`
+> `r tufte::quote_footer("R Core Team, [*Writing R Extensions*](https://cran.r-project.org/doc/manuals/r-release/R-exts.html)")`
 
 
 > A package is **not** a *library*.
 >
-> `r tufte::quote_footer("R Core Team, *Writing R Extensions*")`
+> `r tufte::quote_footer("R Core Team, [*Writing R Extensions*](https://cran.r-project.org/doc/manuals/r-release/R-exts.html)")`
 
 While the primary purpose of packages is to write code for others to use, there are some compelling other uses.
 
@@ -128,7 +128,7 @@ knitr::include_graphics("../../img/github_zip.png")
 devtools::install_packages("bsmity13/LoCoHverlap")
 ```
 
-  (Of course, make sure you have the `devtools` package already installed!)  
+  (Of course, make sure you have the `devtools` package already installed!)
   
 ## Interfacing with the Operating System
 
@@ -136,7 +136,7 @@ Once you find yourself outside of R's wheelhouse, you can reach out from R to ot
 
 > A shell is a computer program which exposes an operating system's services to a human user or other program.
 >
-> `r tufte::quote_footer("Wikipedia")`
+> `r tufte::quote_footer("[Wikipedia](https://en.wikipedia.org/wiki/Shell_(computing))")`
 
 The GUI ("gooey"; Graphical User Interface) that you interact with everyday when you start your computer is technically a shell, but most people (that I know) are referring to a CLI (Command Line Interface) when they say **shell**. You are probably aware of various CLIs, even if you don't use them much.  
 
@@ -152,11 +152,7 @@ The GUI ("gooey"; Graphical User Interface) that you interact with everyday when
     
 Note that, for example, `bash` is a language that can be run by a CLI program. Both Windows and Mac have programs that can run `bash`, but `bash` is not the default command language in either operating system. (Mac moved from `bash` to `zsh` by default in 2019).
 
-This is not a comprehensive lesson on using a CLI, but we will be writing some shell code today. If you're interested in learning more, I'd point you to the Software Carpentry lesson on [The Unix Shell](https://swcarpentry.github.io/shell-novice/).
-
-This will be, perhaps, the trickiest part of this workshop since the exact syntax and results will vary from platform-to-platform. Unfortunately, I have *very* little experience with macOS, so we might find it difficult to troubleshoot problems with the shell on Mac, and I apologize in advance for having only Windows-specific examples. I'll try to generalize as much as I can.
-
-For now, suffice it to say that we can pass shell commands to the system from R with the R function `shell()` on Windows or `system()` on Mac. For example, in Windows, the command `dir` prints the directory contents. Here's what I get if I run this from R.
+This is not a comprehensive lesson on using a CLI, but we will be writing some shell code today. We'll do a tiny bit of surface scratching in the next module. For now, suffice it to say that we can pass shell commands to the system from R with the R function `shell()` on Windows or `system()` on Mac. For example, in Windows, the command `dir` prints the directory contents. Here's what I get if I run this from R.
 
 ```{r shell dir, eval = FALSE}
 shell("dir")
@@ -165,7 +161,7 @@ shell("dir")
  Volume in drive C is Windows
  Volume Serial Number is 6EF3-113E
 
- Directory of C:\Users\bsmit\Box Sync\PhD\Data\Spatial Covariates\02_Tools\01_R
+ Directory of C:\Users\bsmit\Box Sync\PhD\Data\Tutorials\Spatial Covariates\02_Tools\01_R
 
 02/18/2021  06:01 PM    <DIR>          .
 02/18/2021  06:01 PM    <DIR>          ..
@@ -183,7 +179,7 @@ If you're on Mac, try this:
 system("ls")
 ```
 
-I think your results should be similar.
+I think (*hope?*) your results will be similar.
 
 R has good built-in utilities for doing things like printing out directory contents (see `?dir`), so we won't be relying on the shell for that. Instead, we'll be relying on the shell to call other programs or open other files on our computers. We'll see this in the next module.
 
@@ -196,7 +192,7 @@ Let's see two examples: (1) a webpage and (2) an image.
   - On Windows: `shell.exec("https://www.github.com")`
   - On Mac: `system("https://www.github.com")`
     
-  2. As opposed to `"https://"`, paths to files will start with `"file:///"`. This is not necessary if you're using a relative path to call a file (in an up-to-date version of R). In this R Markdown's current directory, there is an image called `"happy.png"`. Let's open it.  
+  2. As opposed to `"https://"`, paths to files will start with `"file:///"` (yes, three slashes). This is not necessary if you're using a relative path to call a file (in an up-to-date version of R). In this R Markdown's current directory, there is an image called `"happy.png"`. Let's open it.  
   
   - On Windows: `shell.exec("happy.png")`
   - On Mac: `system("happy.png")`
@@ -207,6 +203,9 @@ You should hopefully see this smiling face!
 knitr::include_graphics("happy.png")
 ```
 
+## Conclusion
+
+R can do a lot more than you might think. It can produce dynamic documents (HTML, PDF, or MS Word) that contain text, images, and code chunks with R Markdown. R packages extend the base functionality of R signficantly. These packages themselves are written primarily in R, and this series of R scripts is the package source code. To be used in an R session, a package needs to be installed, or converted from source to binary and copied to a library directory. When you've hit your limits within R, you can call out to the operating system for help.
 
 ---
 

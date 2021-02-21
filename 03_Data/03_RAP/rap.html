@@ -1528,8 +1528,92 @@ div.tocify {
 </div>
 
 
-<div id="rap" class="section level1">
-<h1>RAP</h1>
+<div id="what-is-rap" class="section level2">
+<h2>What is RAP?</h2>
+<blockquote>
+<p>The Rangeland Analysis Platform (RAP) is an interactive web application designed to assist in managing and monitoring America’s valuable rangelands. This free tool was developed for landowners, managers, and conservationists to quickly and easily access information that can guide land use decisions.</p>
+<p>…</p>
+<p>The RAP was created in collaboration with the USDA’s Natural Resources Conservation Service, the DOI’s Bureau of Land Management, and the University of Montana.</p>
+<footer>
+<a href="https://rangelands.app/about/" class="uri">https://rangelands.app/about/</a>
+</footer>
+</blockquote>
+<p>Notice two key things about RAP: (1) it is designed to be a “platform” and (2) its web address ends in <code>.app</code>. Those are clues as to why it’s tricky to get your hands on the data. Unlike the other data sources we’ve seen – for which I’ve <em>encouraged</em> you to download the data programmatically – you <em>must</em> download RAP programmatically. Well, almost – let me explain.</p>
+<p>RAP is meant to be used interactively and online – <em>i.e.</em>, it is <em>primarily</em> a web app. RAP’s primary users are landowners and managers, some of which don’t have formal training with GIS software. While the app is the primary interface, the data underlying the app are very useful for folks like us – academic ecologists. But because we are not RAP’s primary users, there is no dedicated web app for downloading portions of the data. However, they do make the data available for download. The main challenge with most RAP data is that each layer is stored as a single GeoTiff which covers the <em>entire western US</em>. The % cover files (details below), for example, are ~ 130 GB each, far too large for most of us to download and process efficiently on a desktop or laptop computer. (The issue is not necessarily hard drive space, but rather RAM [“memory”] in most cases – although if you need 10 years of data, that will more than fill a 1 TB hard drive).</p>
+<p>If you’re interested in using RAP, I do highly recommend you check out the app itself. <a href="https://rangelands.app/" class="uri">https://rangelands.app/</a></p>
+<p>So did I actually tell you what RAP is? Maybe it will be clearer to tell you what data sets RAP provides.</p>
+</div>
+<div id="rap-data-sets" class="section level2">
+<h2>RAP Data Sets</h2>
+<p>All of RAP’s data sets are accompanied by peer reviewed literature describing them in detail. I highly recommend you read the relevant papers to understand the data set before using it in an analysis.</p>
+<p>RAP uses <a href="https://www.usgs.gov/core-science-systems/nli/landsat">Landsat</a> satellite imagery, ground data, and machine learning algorithms (<em>e.g.</em>, random forest, convolutional neural networks) to produce the following data sets:</p>
+<div id="biomass" class="section level3">
+<h3>Biomass</h3>
+<p><span style="color: red;"><strong><em>New in 2020</em></strong></span></p>
+<p><em>Note, this is the layer that Dr. Eric Thacker spoke highly of to our group in a recent lab meeting.</em></p>
+<blockquote>
+<p>The Rangeland Analysis Platform’s vegetation biomass product provides annual and 16-day aboveground biomass from 1986 to present of: annual forbs and grasses, perennial forbs and grasses, and herbaceous (combination of annual and perennial forbs and grasses). Estimates represent accumulated new biomass throughout the year or 16-day period and do not include biomass accumulation in previous years.</p>
+<footer>
+<a href="https://rangelands.app/products/#biomass" class="uri">https://rangelands.app/products/#biomass</a>
+</footer>
+</blockquote>
+</div>
+<div id="cover" class="section level3">
+<h3>Cover</h3>
+<blockquote>
+<p>The Rangeland Analysis Platform’s vegetation cover product provides annual percent cover estimates from 1984 to present of: annual forbs and grasses, perennial forbs and grasses, shrubs, trees, and bare ground.</p>
+<footer>
+<a href="https://rangelands.app/products/#cover" class="uri">https://rangelands.app/products/#cover</a>
+</footer>
+</blockquote>
+</div>
+<div id="rangeland-carbon" class="section level3">
+<h3>Rangeland Carbon</h3>
+<blockquote>
+<p>The Rangeland Analysis Platform provides annual and 16-day rangeland carbon estimates from 1986 to present. These estimates represent net primary productivity (NPP; total net plant carbon) and are partitioned into the following functional groups: annual forb and grass, perennial forb and grass, shrub, and tree. NPP is the net increase (i.e., photosynthesis minus respiration) in total plant carbon, including above and below ground. NPP does not measure soil carbon.</p>
+<footer>
+<a href="https://rangelands.app/products/#rangeland-carbon" class="uri">https://rangelands.app/products/#rangeland-carbon</a>
+</footer>
+</blockquote>
+</div>
+<div id="conus-carbon" class="section level3">
+<h3>CONUS Carbon</h3>
+<p><em>(CONUS = conterminous United States)</em></p>
+<blockquote>
+<p>In addition to rangeland carbon, the Rangeland Analysis Platform provides estimates of gross primary productivity (GPP) and net primary productivity (NPP) for the conterminous United States (CONUS).</p>
+<footer>
+<a href="https://rangelands.app/products/#conus-carbon" class="uri">https://rangelands.app/products/#conus-carbon</a>
+</footer>
+</blockquote>
+</div>
+<div id="great-plains-conservation" class="section level3">
+<h3>Great Plains Conservation</h3>
+<p>RAP has data specific to the Great Plains, but we will not cover it here. FYI:</p>
+<p><a href="https://rangelands.app/products/#great-plains-conservation" class="uri">https://rangelands.app/products/#great-plains-conservation</a></p>
+</div>
+<div id="sagebrush-conservation" class="section level3">
+<h3>Sagebrush Conservation</h3>
+<p>RAP also has data specific to the sagebrush biome. Many of us working in Utah might find this useful, but we won’t get into specifics. The approach we use to download the other GeoTIFFs will work here, so if you’re interested, definitely check it out:</p>
+<p><a href="https://rangelands.app/products/#sagebrush-conservation" class="uri">https://rangelands.app/products/#sagebrush-conservation</a></p>
+</div>
+</div>
+<div id="downloading-data-the-hard-way" class="section level2">
+<h2>Downloading Data (the hard way)</h2>
+</div>
+<div id="downloading-data-the-easy-way" class="section level2">
+<h2>Downloading Data (the easy way)</h2>
+<p>Sorry, there’s no easy way right now!</p>
+</div>
+<div id="downloading-data-the-other-way" class="section level2">
+<h2>Downloading Data (the other way)</h2>
+<p>RAP data are generated using Google Earth Engine, and they are also made available for others to use through Google Earth Engine (GEE).</p>
+<p>I have just barely started dabbling with GEE, and it is definitely something I’m interested in learning more about. But I definitely don’t have the experience to include GEE in this workshop.</p>
+<p>I will point out that there is an R package for interfacing with GEE (via Python). If you’re interested, check it out! I’d love to hear feedback on what you think.</p>
+<p><a href="https://r-spatial.github.io/rgee/" class="uri">https://r-spatial.github.io/rgee/</a></p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>RAP has several products that are particularly useful for understanding the space-use of ungulates in the western US. Biomass, percent cover, and carbon (NPP) are all available for download. To avoid dealing with huge files, use GDAL to extract the portion of the raster you need and download it to your local machine. If you have experience with Google Earth Engine, you can also access data from there.</p>
 <hr />
 <p><a href="../../index.html" class="workshop-home">Workshop Table of Contents</a></p>
 </div>

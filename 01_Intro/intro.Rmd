@@ -17,9 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Welcome to the *Spatial Covariates Workshop*! This is a workshop for the [Space-use Ecology Lab](https://talavgar.com/) at [Utah State University](https://qcnr.usu.edu/wild/). This workshop was created in February 2021 to help give an overview of the diversity of approaches to downloading some common spatial covariates that we commonly use in our analyses. The workshop content was authored by [Brian J. Smith](mailto:brian.smith@usu.edu) (so now you know who to blame if it's terribly confusing! `r emo::ji("winking face")`).
 
-This workshop will, of course, focus on the data we need for our analyses. But it is also focused on building the skills to download the remote data, efficiently, from wherever it may be housed.
-
-The primary focus will be on downloading data from R, and this workshop and all of its associated materials are written almost entirely in R (with R Markdown).
+This workshop will, of course, focus on the data we need for our analyses. But it is also focused on building the skills to download the remote data, efficiently, from wherever it may be housed. **Our focus will be on downloading data programmatically and reproducibly.** We will accomplish this by working from R, and this workshop and all of its associated materials are written almost entirely in R (with R Markdown).
 
 ## Software  
 
@@ -37,7 +35,7 @@ If you're on Windows:
 If you're on Mac:  
 
   1. Install Xcode from the Mac App Store. I've read they might make you register (for free?) as a developer to download Xcode.
-  2. Install GDAL. I found instructions for [here](https://trac.osgeo.org/gdal/wiki/BuildingOnMac), but I've never done this myself. It looks like there's an option to download a binary, but Mac's package manager [Homebrew](https://brew.sh/) can also install it (`brew install gdal`). I've never used Homebrew, but if I had a Mac, that's the route I'd go. Package managers make installing technical software much easier, and this is likely not the last time you'll use it.
+  2. Install GDAL. I found instructions for that [here](https://trac.osgeo.org/gdal/wiki/BuildingOnMac), but I've never done this myself. It looks like there's an option to download a binary, but Mac's package manager [Homebrew](https://brew.sh/) can also install it (`brew install gdal`). I've never used Homebrew, but if I had a Mac, that's the route I'd go. Package managers make installing technical software much easier, and this is likely not the last time you'll use it.
 
 If you're on Linux:
 

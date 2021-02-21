@@ -13,7 +13,91 @@ css: ../../my.css
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# RAP
+## What is RAP?
+
+> The Rangeland Analysis Platform (RAP) is an interactive web application designed to assist in managing and monitoring America’s valuable rangelands. This free tool was developed for landowners, managers, and conservationists to quickly and easily access information that can guide land use decisions.
+>
+> ...
+> 
+> The RAP was created in collaboration with the USDA’s Natural Resources Conservation Service, the DOI’s Bureau of Land Management, and the University of Montana.
+> 
+> `r tufte::quote_footer("https://rangelands.app/about/")` 
+
+Notice two key things about RAP: (1) it is designed to be a "platform" and (2) its web address ends in `.app`. Those are clues as to why it's tricky to get your hands on the data. Unlike the other data sources we've seen -- for which I've *encouraged* you to download the data programmatically -- you *must* download RAP programmatically. Well, almost -- let me explain.
+
+RAP is meant to be used interactively and online -- *i.e.*, it is *primarily* a web app. RAP's primary users are landowners and managers, some of which don't have formal training with GIS software. While the app is the primary interface, the data underlying the app are very useful for folks like us -- academic ecologists. But because we are not RAP's primary users, there is no dedicated web app for downloading portions of the data. However, they do make the data available for download. The main challenge with most RAP data is that each layer is stored as a single GeoTiff which covers the *entire western US*. The % cover files (details below), for example, are ~ 130 GB each, far too large for most of us to download and process efficiently on a desktop or laptop computer. (The issue is not necessarily hard drive space, but rather RAM ["memory"] in most cases -- although if you need 10 years of data, that will more than fill a 1 TB hard drive).
+
+If you're interested in using RAP, I do highly recommend you check out the app itself. https://rangelands.app/
+
+So did I actually tell you what RAP is? Maybe it will be clearer to tell you what data sets RAP provides.
+
+## RAP Data Sets
+
+All of RAP's data sets are accompanied by peer reviewed literature describing them in detail. I highly recommend you read the relevant papers to understand the data set before using it in an analysis.
+
+RAP uses [Landsat](https://www.usgs.gov/core-science-systems/nli/landsat) satellite imagery, ground data, and machine learning algorithms (*e.g.*, random forest, convolutional neural networks) to produce the following data sets:
+
+### Biomass
+
+<span style = "color: red;">***New in 2020***</span>
+
+*Note, this is the layer that Dr. Eric Thacker spoke highly of to our group in a recent lab meeting.*
+
+> The Rangeland Analysis Platform’s vegetation biomass product provides annual and 16-day aboveground biomass from 1986 to present of: annual forbs and grasses, perennial forbs and grasses, and herbaceous (combination of annual and perennial forbs and grasses). Estimates represent accumulated new biomass throughout the year or 16-day period and do not include biomass accumulation in previous years.
+>
+> `r tufte::quote_footer("https://rangelands.app/products/#biomass")`
+
+### Cover
+
+> The Rangeland Analysis Platform’s vegetation cover product provides annual percent cover estimates from 1984 to present of: annual forbs and grasses, perennial forbs and grasses, shrubs, trees, and bare ground.
+>
+> `r tufte::quote_footer("https://rangelands.app/products/#cover")`
+
+### Rangeland Carbon
+
+> The Rangeland Analysis Platform provides annual and 16-day rangeland carbon estimates from 1986 to present. These estimates represent net primary productivity (NPP; total net plant carbon) and are partitioned into the following functional groups: annual forb and grass, perennial forb and grass, shrub, and tree. NPP is the net increase (i.e., photosynthesis minus respiration) in total plant carbon, including above and below ground. NPP does not measure soil carbon.
+>
+> `r tufte::quote_footer("https://rangelands.app/products/#rangeland-carbon")`
+
+### CONUS Carbon
+
+*(CONUS = conterminous United States)*
+
+> In addition to rangeland carbon, the Rangeland Analysis Platform provides estimates of gross primary productivity (GPP) and net primary productivity (NPP) for the conterminous United States (CONUS).
+>
+> `r tufte::quote_footer("https://rangelands.app/products/#conus-carbon")`
+
+### Great Plains Conservation
+
+RAP has data specific to the Great Plains, but we will not cover it here. FYI:  
+
+https://rangelands.app/products/#great-plains-conservation
+
+### Sagebrush Conservation
+
+RAP also has data specific to the sagebrush biome. Many of us working in Utah might find this useful, but we won't get into specifics. The approach we use to download the other GeoTIFFs will work here, so if you're interested, definitely check it out:
+
+https://rangelands.app/products/#sagebrush-conservation
+
+## Downloading Data (the hard way)
+
+## Downloading Data (the easy way)
+
+Sorry, there's no easy way right now!
+
+## Downloading Data (the other way)
+
+RAP data are generated using Google Earth Engine, and they are also made available for others to use through Google Earth Engine (GEE). 
+
+I have just barely started dabbling with GEE, and it is definitely something I'm interested in learning more about. But I definitely don't have the experience to include GEE in this workshop.
+
+I will point out that there is an R package for interfacing with GEE (via Python). If you're interested, check it out! I'd love to hear feedback on what you think.
+
+https://r-spatial.github.io/rgee/
+
+## Conclusion
+
+RAP has several products that are particularly useful for understanding the space-use of ungulates in the western US. Biomass, percent cover, and carbon (NPP) are all available for download. To avoid dealing with huge files, use GDAL to extract the portion of the raster you need and download it to your local machine. If you have experience with Google Earth Engine, you can also access data from there.
 
 ---
 

@@ -9,6 +9,99 @@ output:
 css: ../../my.css
 ---
 
-# GDAL
+## What is GDAL?
+
+The **G**eographic **D**ata **A**bstraction **L**ibrary (GDAL).
+
+> GDAL is a translator library for raster and vector geospatial data formats that is released under an X/MIT style Open Source License by the Open Source Geospatial Foundation. As a library, it presents a single raster abstract data model and single vector abstract data model to the calling application for all supported formats. It also comes with a variety of useful command line utilities for data translation and processing.
+>
+> `r tufte::quote_footer("[GDAL.org](https://gdal.org/)")`
+
+<span style = "color:red;">***Huh?***</span>
+
+It sits between your spatial data and the GIS you're using. It supports a whole bunch of **raster** and **vector** file formats, which it reads in and spits out in one consistent format. That makes it easier for programmers to use it to pre-process almost *any* geospatial data file you might want to load.
+
+You might be thinking, "Oh, so R can read a bunch of geospatial files using GDAL." And you'd be right, but that's not why we're interested in GDAL today. Actually, you may have just installed GDAL for today's workshop, but you've already been loading GIS files into R. That's because when you install R's spatial packages -- like `sp`, `sf`, or `raster` -- you also install `rgdal`. Which is basically the GDAL translator library in R package form (plus some other R functionality).
+
+It "also comes with a variety of useful command line utilities," which is what we're interested in today. I had you install GDAL, instead of relying on `rgdal`, because we need to access those command line utilities. That's also a big part of the reason we went over the command line in the last module.
+
+## Command Line Utilities
+
+So what command line utilities does it come with?
+
+There are a bunch. You can see the full list (with links to documentation) here: https://gdal.org/programs/index.html
+
+In the last module, I mentioned how much more efficient you can be if you learn to interact with your computer via the command line. Take a look at the functionality of something like the GDAL utilities, and maybe you can imagine how efficiently you can process *large* amounts of geospatial data. You can also use GDAL commands on remote datasets, something we'll come back to in a later module. That means you can use GDAL to process data on other machines, using your local CPU. If you were trying to work on a high performance computer (HPC, or "supercomputer"), you'd also need to interact with that through command line utilities (or at least scripts that run command line utilities).
+
+## Program `gdal_translate`
+
+We're not going over all the GDAL tools today. The one we're particularly interested in is `gdal_translate`. You can read its documentation here: https://gdal.org/programs/gdal_translate.html
+
+The description says, "Converts raster data between different formats," but it can really do so much more. Here are a few examples of additional parameters you can pass the program:  
+
+
+  * [`-projwin`](https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-projwin) allows you to select a **win**dow (using **proj**ected coordinates) to subset.
+  * [`-tr`](https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-tr) allows you to specify a new **t**arget **r**esolution, *i.e.*, to resample to a new grain size.
+  * [`-r`](https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-r) allows you to specify a **r**esampling algorithm if you are resizing the resolution or transforming the projection.
+  
+You can see there are many more options. So you might want to use `gdal_translate` to *translate* a file from an ArcInfo Grid to a GeoTIFF, like the description implies. But you might also want to use it to subset some piece of a GeoTIFF, resample it to a new resolution, and save it also as a GeoTIFF. So, like I said, it does a lot more than just converting formats.
+
+### Using `gdal_translate`
+
+*Sounds exciting! How do we use it?*
+
+These command line programs are stand-alone programs, just like `R.exe` which we mentioned in the last module. So we need to either (1) navigate to the directory where the program is stored and call it with its **relative path**, (2) call it using its **full path**, or (3) put its path on the PATH.
+
+At a minimum, I need to pass `gdal_translate` the input file and then the output file. Ignoring paths for right now, we could write something like this:
+
+```{bash gdal 1, eval = FALSE}
+gdal_translate my_raster.asc my_raster.tif
+```
+
+Our program would know to read the ASCII grid file `my_raster.asc` and convert it to a GeoTIFF called `my_raster.tif`.
+
+On my computer, I installed GDAL using the OSGeo4W installer, so they are located in `C:\OSGeo4W64\bin`. The last folder name, `bin`, is conventionally where programs store their **binaries**.
+
+So I can navigate to that directory and then call `gdal_translate`. The problem is that we need to know the location of the input and output files, too. They will not be in `C:\OSGeo4W64\bin`. Let's say I have my GIS files in `C:\Users\bsmit\Documents\GIS`. How could I use `gdal_translate`?
+
+From anywhere, I can use all absolute paths, which would work perfectly fine:
+
+```{bash gdal 2, eval = FALSE}
+C:\OSGeo4W64\bin\gdal_translate C:\Users\bsmit\Documents\GIS\my_raster.asc C:\Users\bsmit\Documents\GIS\my_raster.tif
+```
+
+I can probably save myself some keystrokes by navigating to the GIS directory. Then I can use the **full path** to GDAL but relative paths to the input and output files.
+
+```{bash gdal 3, eval = FALSE}
+cd C:\Users\bsmit\Documents\GIS
+
+C:\OSGeo4W64\bin\gdal_translate my_raster.asc my_raster.tif
+```
+
+Finally, if I were to add `C:\OSGeo4W64\bin` to my PATH, I would never have to type the path to `gdal_translate`. I can navigate to my GIS directory, and simply type:
+
+```{bash gdal 4, eval = FALSE}
+cd C:\Users\bsmit\Documents\GIS
+
+gdal_translate my_raster.asc my_raster.tif
+```
+
+I am actually *not* suggesting that you add the path to your GDAL utilities to your PATH. First, it can be a pain to edit your PATH (and requires admin rights, which is a problem for some people). Second, if we call the shell from R, we can easily `paste()` together the command we need, so we won't actually be doing all that typing over and over. We'll see this in action in a later module.
+
+*How do I use those other parameters?*
+
+Say we want to resample our ASCII grid raster to 100 x 100 meter resolution (assuming it's in a projected coordinate system that uses meters) using bilinear interpolation. Ignoring paths:
+
+```{bash gdal 5, eval = FALSE}
+gdal_translate -tr 100 100 -r bilinear my_raster.asc my_raster.tif
+```
+
+We add the "flag" (*e.g.*, `-r`) and then the parameter value(s). I know, this looks very different from R programming where you pass a function all of its arguments within parentheses. Like any other language, you'll get the hang of it with practice (*and Google!* `r emo::ji("winking face")`).
+
+## Conclusion
+
+GDAL is comprised of a translator library and a set of command line utilities. It can be a powerful tool for working with large volumes of geospatial data or even with remote data. The tool we will focus on for the rest of today is `gdal_translate`, but be sure to consider others if you have a large number of GIS operations to do. 
+
+---
 
 <a href = "../../index.html" class = "workshop-home">Workshop Table of Contents</a>

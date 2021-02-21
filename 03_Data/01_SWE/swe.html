@@ -1528,8 +1528,120 @@ div.tocify {
 </div>
 
 
-<div id="swe" class="section level1">
-<h1>SWE</h1>
+<div id="what-is-swe" class="section level2">
+<h2>What is SWE?</h2>
+<blockquote>
+<p>Snow Water Equivalent (SWE) is a common snowpack measurement. It is the amount of water contained within the snowpack. It can be thought of as the depth of water that would theoretically result if you melted the entire snowpack instantaneously.</p>
+<footer>
+<a href="https://www.nrcs.usda.gov/wps/portal/nrcs/detail/or/snow/?cid=nrcs142p2_046155">USDA NRCS</a>
+</footer>
+</blockquote>
+<p>In other words, SWE accounts for how fluffy or dense the snow is. That tends to make it a better measurement for understanding animal movements than snow depth alone. However, note that many of the data sources we cover here also have snow depth data, so you should be able to get snow depth if you prefer.</p>
+<p>For a detailed discussion of how snowpack affects animal movement, you might be interested in Mahoney et al. (2018).</p>
+<p><span style="font-size: 0.8em;">Mahoney, Peter J., et al. 2018. “Navigating snowscapes: scale‐dependent responses of mountain sheep to snowpack properties.” Ecological Applications 28(7): 1715-1729. DOI: <a href="https://doi.org/10.1002/eap.1773">10.1002/eap.1773</a>.</span></p>
+</div>
+<div id="data-sources" class="section level2">
+<h2>Data Sources</h2>
+<p>There are multiple data sources that have broad spatial coverage of SWE data. We will discuss these three:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Dataset</th>
+<th align="left">Source</th>
+<th align="left">Link</th>
+<th align="left">Citation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Daymet v4</td>
+<td align="left">NASA</td>
+<td align="left"><a href="https://daac.ornl.gov/DAYMET/guides/Daymet_Daily_V4.html" target="_blank" rel="noopener noreferrer">ORNL DAAC</a></td>
+<td align="left"><a href="https://daymet.ornl.gov/files/Thornton_Daymet_V4_submitted_2021-01-20.pdf" target="_blank" rel="noopener noreferrer">Thornton et al. 2020</a></td>
+</tr>
+<tr class="even">
+<td align="left">ERA5-Land Hourly</td>
+<td align="left">ECMWF</td>
+<td align="left"><a href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/10.24381/cds.e2161bac?tab=overview" target="_blank" rel="noopener noreferrer">ERA5-Land</a></td>
+<td align="left">DOI: <a href="https://doi.org/10.24381/cds.e2161bac" target="_blank" rel="noopener noreferrer">10.24381/cds.e2161bac</a></td>
+</tr>
+<tr class="odd">
+<td align="left">SNODAS</td>
+<td align="left">NOAA</td>
+<td align="left"><a href="https://nsidc.org/data/g02158" target="_blank" rel="noopener noreferrer">NSIDC</a></td>
+<td align="left">DOI: <a href="https://doi.org/10.7265/N5TB14TC" target="_blank" rel="noopener noreferrer">10.7265/N5TB14TC</a></td>
+</tr>
+</tbody>
+</table>
+<p>Each of these three data sources have their pros and cons.</p>
+<div id="daymet" class="section level3">
+<h3>Daymet</h3>
+<p>The Daymet data covers all of North America. It models surface weather based on weather stations at a 1 km resolution. Data are available from 1980 – present. Unfortunately, the model’s treatment of SWE is not ideal. From the Daymet user manual:</p>
+<blockquote>
+<p>Snowpack, quantified as snow water equivalent (SWE), is estimated as part of the Daymet processing in order to reduce biases in shortwave radiation estimates related to multiple reflections between the surface and atmosphere that are especially important when the surface is covered by snow (Thornton et al. 2000). The Daymet (v3.0) dataset includes estimated SWE as an output variable since this quantity may be of interest for research applications in addition to its primary intended use as a component of the Daymet shortwave radiation algorithm. An important caveat in the use of SWE from the Daymet (v3.0) dataset is that the algorithm used to estimate SWE is executed with only a single calendar year of primary surface weather inputs (daily maximum and minimum temperature and daily total precipitation) available for the estimation of a corresponding calendar year of snowpack. Since northern hemisphere snowpack accumulation is commonly underway already at the beginning of the calendar year, the SWE algorithm uses data from a single calendar year to make a two-year sequence of temperature and precipitation, then predicts the evolution of snowpack over this two-year period to provide an estimate of yearday 365 (December 31 for non-leapyears) snowpack as an initial condition for the January 1 time step of the actual calendar year. The problem with this approach is that it ignores the dependence of January 1 snowpack on preceding calendar year temperature and precipitation conditions, and so generates potential biases in mid-season snowpack which can propagate to biases in late-season timing of snow melt.</p>
+<footer>
+<a href="https://daymet.ornl.gov/static/files/UserGuides/v3/DaymetV3_readme_tileselectiondata.pdf">Daymet V3</a>
+</footer>
+</blockquote>
+<p>What I take away from this warning is that the SWE is calculated to adjust for the other meterological variables, but that the calculation itself is sub-optimal (because it ignores the dependence of January 1 on the preceding year’s temperature and precipitation). I’ve also seen instances in the ecological literature where someone used Daymet for temperature and precipitation but <em>not</em> for SWE. Ultimately, you should make your own judgement call, but note that Daymet is available at a finer scale than ERA5 and for a longer timeseries than SNODAS, so it may be the best choice for you.</p>
+</div>
+<div id="era5-land-hourly" class="section level3">
+<h3>ERA5-Land Hourly</h3>
+<p>The ERA5-Land Hourly dataset is meant to be a global, historical climate reconstruction. It predicts SWE (among other variables) at hourly intervals across the globe. It’s native resolution is coarse at ~9 km (technically 1° x 1° cells), so it’s very well suited to very large-scale analyses. Data are currently available from 1981 – present, but they will soon provide data from 1950 – present.</p>
+</div>
+<div id="snodas" class="section level3">
+<h3>SNODAS</h3>
+<blockquote>
+<p>SNODAS is a modeling and data assimilation system developed by NOHRSC to provide the best possible estimates of snow cover and associated parameters to support hydrologic modeling and analysis. The aim of SNODAS is to provide a physically consistent framework to integrate snow data from satellite, airborne platforms, and ground stations with model estimates of snow cover.</p>
+<footer>
+<a href="https://nsidc.org/data/g02158">SNODAS User Guide</a>
+</footer>
+</blockquote>
+<p>Okay, so SNODAS is fancy. It was developed by NOAA’s National Snow and Ice Data Center, so it seems apparent that it should do a good job of estimating snow and ice cover. It is available for the contiguous US at a 1 km resolution. Data are available from 2004 – present.</p>
+<p>I have seen SNODAS used in many ecology publications, and in my opinion, it is the highest quality of these three datasets. However, it also covers the shortest time window and has the most limited geographic coverage.</p>
+</div>
+</div>
+<div id="downloading-data-the-hard-way" class="section level2">
+<h2>Downloading Data (the hard way)</h2>
+<p>We’ll start by looking at how to download data the hard way. I want to go through the process here because it gives a good overview of the diversity of formats and tools by which geospatial data are made available. If you can master these skills, you can find a way to download almost any geospatial data from R. In the next section, we will cover downloading these data using an R package that I am writing, <code>snowdl</code>.</p>
+<div id="daymet-1" class="section level3">
+<h3>Daymet</h3>
+</div>
+<div id="era5-land-hourly-1" class="section level3">
+<h3>ERA5-Land Hourly</h3>
+</div>
+<div id="snodas-1" class="section level3">
+<h3>SNODAS</h3>
+</div>
+</div>
+<div id="downloading-data-the-easy-way" class="section level2">
+<h2>Downloading Data (the easy way)</h2>
+<p>Now that we’ve seen the process, we can see what all of this looks like wrapped up in some nice R functions to do it for you. I wrote <code>snowdl</code> to make my own life easier when I was comparing SWE data sources, but I’m hoping that you also find that it makes your life easier.</p>
+<div id="installing-snowdl" class="section level3">
+<h3>Installing <code>snowdl</code></h3>
+<p>As long as you have all the software required for this workshop, you should have no problem installing <code>snowdl</code> from GitHub. You can download and install it from R with this command:</p>
+<pre class="r"><code>devtools::install_github(&quot;bsmity13/snowdl&quot;)</code></pre>
+<p>Once it’s installed, attach it to your R session the usual way:</p>
+<pre class="r"><code>library(snowdl)</code></pre>
+<p>This package is still a work in progress, so it could change significantly in the coming months. I have some already-planned changes that are laid out on GitHub, but who knows what I’ll decide as I go. When you need this for your own work, make sure to check the GitHub repo to see if there are any updates.</p>
+<p><a href="https://github.com/bsmity13/snowdl" class="uri">https://github.com/bsmity13/snowdl</a></p>
+<p>One day soon there will be nice wrapper functions that do all the steps for you in one line of code, but for now, I’m planning to keep this step-by-step workflow intact.</p>
+</div>
+<div id="daymet-2" class="section level3">
+<h3>Daymet</h3>
+</div>
+<div id="era5-land-hourly-2" class="section level3">
+<h3>ERA5-Land Hourly</h3>
+</div>
+<div id="snodas-2" class="section level3">
+<h3>SNODAS</h3>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>In this module, we covered three potential data sources for snow-water equivalent data. Each has pros and cons, and it is up to you to decide which is best for your application.</p>
+<p>Hopefully, you have a better understanding of how to find the files you need on a webserver, how to download them with R, and how to decompress them and load them.</p>
+<p>I also hope you find <code>snowdl</code> useful next time you need SWE data.</p>
 <hr />
 <p><a href="../../index.html" class="workshop-home">Workshop Table of Contents</a></p>
 </div>

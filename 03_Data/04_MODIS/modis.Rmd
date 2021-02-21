@@ -13,7 +13,19 @@ css: ../../my.css
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# MODIS
+## What is MODIS?
+
+## What is NDVI?
+
+## What is IRG?
+
+## Data Sources
+
+## Downloading Data (the hard way)
+
+## Downloading Data (the easy way)
+
+## Conclusion
 
 ---
 
