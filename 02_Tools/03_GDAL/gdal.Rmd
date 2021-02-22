@@ -35,16 +35,19 @@ In the last module, I mentioned how much more efficient you can be if you learn 
 
 ## Program `gdal_translate`
 
-We're not going over all the GDAL tools today. The one we're particularly interested in is `gdal_translate`. You can read its documentation here: https://gdal.org/programs/gdal_translate.html
+We're not going over all the GDAL tools today. The one we're particularly interested in is `gdal_translate`. Here is the **Description** from its documentation.
 
-The description says, "Converts raster data between different formats," but it can really do so much more. Here are a few examples of additional parameters you can pass the program:  
+> The **gdal_translate** utility can be used to convert raster data between different formats, potentially performing some operations like subsettings, resampling, and rescaling pixels in the process.
+>
+> `r tufte::quote_footer("[gdal_translate](https://gdal.org/programs/gdal_translate.html#description)")`
 
+So it can do a lot more than just "translate" between formats. Here are a few examples of additional parameters you can pass the program:
 
   * [`-projwin`](https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-projwin) allows you to select a **win**dow (using **proj**ected coordinates) to subset.
   * [`-tr`](https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-tr) allows you to specify a new **t**arget **r**esolution, *i.e.*, to resample to a new grain size.
   * [`-r`](https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-r) allows you to specify a **r**esampling algorithm if you are resizing the resolution or transforming the projection.
   
-You can see there are many more options. So you might want to use `gdal_translate` to *translate* a file from an ArcInfo Grid to a GeoTIFF, like the description implies. But you might also want to use it to subset some piece of a GeoTIFF, resample it to a new resolution, and save it also as a GeoTIFF. So, like I said, it does a lot more than just converting formats.
+You can see there are many more options. So you might want to use `gdal_translate` to *translate* a file from an ArcInfo Grid to a GeoTIFF, like the description implies. But you might also want to use it to subset some piece of a GeoTIFF, resample it to a new resolution, and save it also as a GeoTIFF. So, like I said, it does a lot more than just "translate" between formats.
 
 ### Using `gdal_translate`
 
@@ -62,18 +65,18 @@ Our program would know to read the ASCII grid file `my_raster.asc` and convert i
 
 On my computer, I installed GDAL using the OSGeo4W installer, so they are located in `C:\OSGeo4W64\bin`. The last folder name, `bin`, is conventionally where programs store their **binaries**.
 
-So I can navigate to that directory and then call `gdal_translate`. The problem is that we need to know the location of the input and output files, too. They will not be in `C:\OSGeo4W64\bin`. Let's say I have my GIS files in `C:\Users\bsmit\Documents\GIS`. How could I use `gdal_translate`?
+So I can navigate to that directory and then call `gdal_translate`. The problem is that we need to know the location of the input and output files, too. They will not be in `C:\OSGeo4W64\bin`. Let's say I have my GIS files in `C:\temp\GIS`. How could I use `gdal_translate`?
 
 From anywhere, I can use all absolute paths, which would work perfectly fine:
 
 ```{bash gdal 2, eval = FALSE}
-C:\OSGeo4W64\bin\gdal_translate C:\Users\bsmit\Documents\GIS\my_raster.asc C:\Users\bsmit\Documents\GIS\my_raster.tif
+C:\OSGeo4W64\bin\gdal_translate C:\temp\GIS\my_raster.asc C:\temp\GIS\my_raster.tif
 ```
 
 I can probably save myself some keystrokes by navigating to the GIS directory. Then I can use the **full path** to GDAL but relative paths to the input and output files.
 
 ```{bash gdal 3, eval = FALSE}
-cd C:\Users\bsmit\Documents\GIS
+cd C:\temp\GIS
 
 C:\OSGeo4W64\bin\gdal_translate my_raster.asc my_raster.tif
 ```
@@ -81,7 +84,7 @@ C:\OSGeo4W64\bin\gdal_translate my_raster.asc my_raster.tif
 Finally, if I were to add `C:\OSGeo4W64\bin` to my PATH, I would never have to type the path to `gdal_translate`. I can navigate to my GIS directory, and simply type:
 
 ```{bash gdal 4, eval = FALSE}
-cd C:\Users\bsmit\Documents\GIS
+cd C:\temp\GIS
 
 gdal_translate my_raster.asc my_raster.tif
 ```

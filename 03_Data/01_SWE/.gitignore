@@ -1,0 +1,5 @@
+*.nc
+*.tar
+test/
+*_cache/
+*_files/

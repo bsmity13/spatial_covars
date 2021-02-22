@@ -29,7 +29,7 @@ Other software you will need are (1) utilities to build R packages from source a
 
 If you're on Windows:  
 
-  1. Install Rtools. Go to this [link](https://cran.r-project.org/bin/windows/Rtools/) and follow all the directions on the page (including putting Rtools on the path).
+  1. Install Rtools. Go to this [link](https://cran.r-project.org/bin/windows/Rtools/) and follow all the directions on the page (including putting Rtools on the PATH).
   2. Install GDAL. This is easiest using the OSGeo4W installer, which you can download [here](https://trac.osgeo.org/osgeo4w/). The express install will give you the option of choosing QGIS, GDAL, and/or GRASS GIS. (I highly recommend QGIS and the GRASS tools, so if you feel like taking it for a test drive, go for it!). Decide what you want, but make sure you at least get GDAL.
 
 If you're on Mac:  

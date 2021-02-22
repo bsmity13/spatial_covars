@@ -1550,14 +1550,20 @@ div.tocify {
 </div>
 <div id="program-gdal_translate" class="section level2">
 <h2>Program <code>gdal_translate</code></h2>
-<p>We’re not going over all the GDAL tools today. The one we’re particularly interested in is <code>gdal_translate</code>. You can read its documentation here: <a href="https://gdal.org/programs/gdal_translate.html" class="uri">https://gdal.org/programs/gdal_translate.html</a></p>
-<p>The description says, “Converts raster data between different formats,” but it can really do so much more. Here are a few examples of additional parameters you can pass the program:</p>
+<p>We’re not going over all the GDAL tools today. The one we’re particularly interested in is <code>gdal_translate</code>. Here is the <strong>Description</strong> from its documentation.</p>
+<blockquote>
+<p>The <strong>gdal_translate</strong> utility can be used to convert raster data between different formats, potentially performing some operations like subsettings, resampling, and rescaling pixels in the process.</p>
+<footer>
+<a href="https://gdal.org/programs/gdal_translate.html#description">gdal_translate</a>
+</footer>
+</blockquote>
+<p>So it can do a lot more than just “translate” between formats. Here are a few examples of additional parameters you can pass the program:</p>
 <ul>
 <li><a href="https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-projwin"><code>-projwin</code></a> allows you to select a <strong>win</strong>dow (using <strong>proj</strong>ected coordinates) to subset.</li>
 <li><a href="https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-tr"><code>-tr</code></a> allows you to specify a new <strong>t</strong>arget <strong>r</strong>esolution, <em>i.e.</em>, to resample to a new grain size.</li>
 <li><a href="https://gdal.org/programs/gdal_translate.html#cmdoption-gdal_translate-r"><code>-r</code></a> allows you to specify a <strong>r</strong>esampling algorithm if you are resizing the resolution or transforming the projection.</li>
 </ul>
-<p>You can see there are many more options. So you might want to use <code>gdal_translate</code> to <em>translate</em> a file from an ArcInfo Grid to a GeoTIFF, like the description implies. But you might also want to use it to subset some piece of a GeoTIFF, resample it to a new resolution, and save it also as a GeoTIFF. So, like I said, it does a lot more than just converting formats.</p>
+<p>You can see there are many more options. So you might want to use <code>gdal_translate</code> to <em>translate</em> a file from an ArcInfo Grid to a GeoTIFF, like the description implies. But you might also want to use it to subset some piece of a GeoTIFF, resample it to a new resolution, and save it also as a GeoTIFF. So, like I said, it does a lot more than just “translate” between formats.</p>
 <div id="using-gdal_translate" class="section level3">
 <h3>Using <code>gdal_translate</code></h3>
 <p><em>Sounds exciting! How do we use it?</em></p>
@@ -1566,15 +1572,15 @@ div.tocify {
 <pre class="bash"><code>gdal_translate my_raster.asc my_raster.tif</code></pre>
 <p>Our program would know to read the ASCII grid file <code>my_raster.asc</code> and convert it to a GeoTIFF called <code>my_raster.tif</code>.</p>
 <p>On my computer, I installed GDAL using the OSGeo4W installer, so they are located in <code>C:\OSGeo4W64\bin</code>. The last folder name, <code>bin</code>, is conventionally where programs store their <strong>binaries</strong>.</p>
-<p>So I can navigate to that directory and then call <code>gdal_translate</code>. The problem is that we need to know the location of the input and output files, too. They will not be in <code>C:\OSGeo4W64\bin</code>. Let’s say I have my GIS files in <code>C:\Users\bsmit\Documents\GIS</code>. How could I use <code>gdal_translate</code>?</p>
+<p>So I can navigate to that directory and then call <code>gdal_translate</code>. The problem is that we need to know the location of the input and output files, too. They will not be in <code>C:\OSGeo4W64\bin</code>. Let’s say I have my GIS files in <code>C:\temp\GIS</code>. How could I use <code>gdal_translate</code>?</p>
 <p>From anywhere, I can use all absolute paths, which would work perfectly fine:</p>
-<pre class="bash"><code>C:\OSGeo4W64\bin\gdal_translate C:\Users\bsmit\Documents\GIS\my_raster.asc C:\Users\bsmit\Documents\GIS\my_raster.tif</code></pre>
+<pre class="bash"><code>C:\OSGeo4W64\bin\gdal_translate C:\temp\GIS\my_raster.asc C:\temp\GIS\my_raster.tif</code></pre>
 <p>I can probably save myself some keystrokes by navigating to the GIS directory. Then I can use the <strong>full path</strong> to GDAL but relative paths to the input and output files.</p>
-<pre class="bash"><code>cd C:\Users\bsmit\Documents\GIS
+<pre class="bash"><code>cd C:\temp\GIS
 
 C:\OSGeo4W64\bin\gdal_translate my_raster.asc my_raster.tif</code></pre>
 <p>Finally, if I were to add <code>C:\OSGeo4W64\bin</code> to my PATH, I would never have to type the path to <code>gdal_translate</code>. I can navigate to my GIS directory, and simply type:</p>
-<pre class="bash"><code>cd C:\Users\bsmit\Documents\GIS
+<pre class="bash"><code>cd C:\temp\GIS
 
 gdal_translate my_raster.asc my_raster.tif</code></pre>
 <p>I am actually <em>not</em> suggesting that you add the path to your GDAL utilities to your PATH. First, it can be a pain to edit your PATH (and requires admin rights, which is a problem for some people). Second, if we call the shell from R, we can easily <code>paste()</code> together the command we need, so we won’t actually be doing all that typing over and over. We’ll see this in action in a later module.</p>

@@ -28,7 +28,7 @@ Most of us use `R` on a regular basis for our analyses, but there's a chance tha
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-This workshop has an R Markdown HTML file for each module. You can also find the source code (*i.e.*, the `*.Rmd` file) used to create the HTML doc in each module's folder. You may find it easier to copy-and-paste from the source code than from the HTML file itself.
+This workshop has an R Markdown HTML file for each module. You can also find the source code (*i.e.*, the `*.Rmd` file) used to create the HTML doc in each module's folder. You may find it useful to view the source code and see exactly how each document was written.
 
 If you want to learn to use R Markdown on your own, it's easy to get started! RStudio's default template will set you up with everything you need to get started. From RStudio, click the "New File" button in the top left of your screen and select "R Markdown".
 
@@ -38,7 +38,7 @@ knitr::include_graphics("../../img/new_Rmd.png")
 
 ## R Packages
 
-We're all familiar with R packages, but do we *really* know how they work? And do we really know how to troubleshoot problems? Let's dive into some details and see what we can learn.  
+We're all familiar with R packages, but do we *really* know how they work? Understanding the basic underpinnings will help us install packages from **source** and troubleshoot any issues. Let's dive into some details and see what we can learn.  
 
 ### What is an R package, anyway?
 
@@ -84,7 +84,7 @@ While the primary purpose of packages is to write code for others to use, there 
 
 ### Source vs. Binary
 
-R packages are written in `R` (and sometimes other languages, like C++). They have some other specific requirements, but the functions (and sometimes the documentation) are actually written in a series of (mostly) R scripts. This original code, written in `R`, is the **source**. In general, **source** code is human-readable.
+R packages are written in `R` (and sometimes other languages, like C++). They have some other specific requirements, but the functions (and sometimes the [documentation](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html)) are actually written in a series of (mostly) R scripts. This original code, written in `R`, is the **source**. In general, **source** code is human-readable.
 
 Before a source package can be used normally in `R`, it must be **installed**. A source package can be installed by the R utility `R CMD INSTALL`, which you can read about in R with `?INSTALL`. 
 
@@ -92,13 +92,13 @@ On macOS and Windows, installed packages are stored as **binaries**, meaning the
 
 By default, macOS and Windows do not have the system utilities needed to build a binary. We will come back to this in the next section (**Building Packages from Source**). Instead, most users will download pre-built binaries from [CRAN](https://cran.r-project.org/).
 
-Authors of R packages submit their work to CRAN, which (after approval) takes the source code and creates a build (i.e., a **binary**) for many different versions of `R` and for many different operating systems (various Windows, macOS, and Linux OSes). When you run `install.packages()`, you are by default connecting to CRAN, downloading the appropriate **binary** for your machine, and unzipping it into your default *library directory*. That is, CRAN built the **binary** for you so that you don't need the extra build tools.
+Authors of R packages submit their work to CRAN, which (after approval) takes the source code and creates a build (i.e., a **binary**) for many different versions of `R` and for many different [operating systems](https://cran.r-project.org/bin/) (Windows, macOS(x), and Linux). When you run `install.packages()`, you are by default connecting to CRAN, downloading the appropriate **binary** for your machine, and unzipping it into your default *library directory*. That is, CRAN built the **binary** for you so that you don't need the extra build tools.
 
 ### Building Packages from Source
 
 *Okay, but what if I want to build my own package locally?*
 
-You can do that! But assuming you're not on a Linux machine, you're going to need some help.
+You can do that! But if you're not on a Linux machine, you're going to need some help.
 
   * Windows users:  
       - You need `Rtools`. *It is __not__ an R package.* It is a stand-alone collection of tools and libraries that can be used to build packages (or even R itself) from source code. You can find the download and install instructions [here](https://cran.r-project.org/bin/windows/Rtools/).
@@ -130,6 +130,38 @@ devtools::install_packages("bsmity13/LoCoHverlap")
 
   (Of course, make sure you have the `devtools` package already installed!)
   
+That function will download my repo, unzip it, and call `R CMD INSTALL` to build it locally. It will also print the output of `R CMD INSTALL` to your R console so you can see what's going on (and any error messages if it fails).
+
+### Troubleshooting Installs
+
+Sometimes, `R CMD INSTALL` will fail. In *most* cases, that is because you already have a package loaded in an R session. (*Some packages have external dependencies that could cause an install to fail, but that is rare*). This is analogous to trying to delete a folder if you have a file in it already open, because, by default, you have a single R *library directory* on your machine. That means all your R packages are installed to one place and loaded from one place. The process of updating a package is literally deleting the existing folder and re-installing, and you can't delete the existing folder if the files it contains are in use. That means if you have two or more R sessions open, packages loaded in *any* of them can cause an install to fail.
+
+In general, it's a good idea to install/update packages from a clean R session with no other R sessions open on your machine.
+
+One tricky situation when installing from GitHub is when a dependency of `devtools` needs to be updated. You might try `devtools::install_github()` from a clean, fresh session, but using that function will attach the `devtools` `NAMESPACE.` When your R session goes to update the `devtools` dependency, it will tell you:
+
+```{r update loaded error, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("../../img/update_loaded.png")
+```
+
+You should say `Yes` to this message, but when you do, you'll have to attach `devtools` again, and you'll find yourself stuck in an infinite loop.
+
+The solution here is to update the packages it's asking for (`devtools` or one or more of its dependencies) manually from a fresh session. You should be able to do that with base R's `install.packages()`, avoiding any issues with attached `NAMESPACE`s.
+
+The install process also "locks" the *library directory* by creating a folder in it called `00LOCK`. This prevents multiple installs from happening at the same time and creates a back-up of the original to restore in case of an error (which usually works -- but not always). You can read more details about this in the **Locking** section of `?install.packages()`.
+
+```{r lock, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("../../img/lock_file.png")
+```
+
+Sometimes, when the install fails, the `00LOCK` directory gets left behind, stopping your future attempts to install that package. In my experience, the only way to fix this is to navigate to your *library directory* and delete the lock folder(s) manually. You can see exactly where your *library directory* is from R with this function:
+
+```{r libpath}
+.libPaths()
+```
+
+Navigate to that folder (on macOS it is inside a hidden folder) and delete the `00LOCK` directory, start a fresh R session, and try again to install your package.
+
 ## Interfacing with the Operating System
 
 Once you find yourself outside of R's wheelhouse, you can reach out from R to other software. One of the easiest ways to do that is via the system **shell**.
@@ -148,9 +180,9 @@ The GUI ("gooey"; Graphical User Interface) that you interact with everyday when
     - Terminal.app
     
   * Linux
-    - Bash 
+    - bash shell
     
-Note that, for example, `bash` is a language that can be run by a CLI program. Both Windows and Mac have programs that can run `bash`, but `bash` is not the default command language in either operating system. (Mac moved from `bash` to `zsh` by default in 2019).
+Note that, for example, `bash` is a language that can be run by a CLI program. Both Windows and Mac have programs that can run `bash`, but `bash` is not the default command language in either operating system. (Mac moved from `bash` to `zsh` as the default Terminal language in 2019).
 
 This is not a comprehensive lesson on using a CLI, but we will be writing some shell code today. We'll do a tiny bit of surface scratching in the next module. For now, suffice it to say that we can pass shell commands to the system from R with the R function `shell()` on Windows or `system()` on Mac. For example, in Windows, the command `dir` prints the directory contents. Here's what I get if I run this from R.
 
@@ -179,9 +211,9 @@ If you're on Mac, try this:
 system("ls")
 ```
 
-I think (*hope?*) your results will be similar.
+I think (*hope?* `r emo::ji("grimacing face")`) your results will be similar.
 
-R has good built-in utilities for doing things like printing out directory contents (see `?dir`), so we won't be relying on the shell for that. Instead, we'll be relying on the shell to call other programs or open other files on our computers. We'll see this in the next module.
+R has good built-in functions for doing things like printing out directory contents (see `?dir`), so we won't be relying on the shell for that. Instead, we'll be relying on the shell to call other programs or open other files on our computers. We'll see this in the next module.
 
 The last thing we'll talk about here is letting the operating system decide how to handle a file. Your system has defaults for what program to use when it encounters a particular file type. If you call a file with the shell, the system will look-up the default program and then use it to open that file. On Windows, you will need to use the R function `shell.exec()` to make sure the OS looks up the file extension. On Mac (or Linux), `system()` should still do the trick.
 
@@ -205,7 +237,7 @@ knitr::include_graphics("happy.png")
 
 ## Conclusion
 
-R can do a lot more than you might think. It can produce dynamic documents (HTML, PDF, or MS Word) that contain text, images, and code chunks with R Markdown. R packages extend the base functionality of R signficantly. These packages themselves are written primarily in R, and this series of R scripts is the package source code. To be used in an R session, a package needs to be installed, or converted from source to binary and copied to a library directory. When you've hit your limits within R, you can call out to the operating system for help.
+R can do a lot more than you might think. It can produce dynamic documents (HTML, PDF, or MS Word) that contain text, images, and code chunks with R Markdown. R packages extend the base functionality of R signficantly. These packages themselves are written primarily in R, and this series of R scripts is the package source code. To be used in an R session, a package needs to be installed, or converted from source to binary and copied to a library directory. Sometimes that can result in errors, and you'll need to do some troubleshooting to fix them. When you've hit the limits of R, you can call out to the operating system for help.
 
 ---
 

@@ -25,19 +25,92 @@ What we're mostly interested in will be digital elevation models (DEMs), as oppo
 
 The U.S. Geological Survey is the Department of Interior's science support agency, and one important USGS program is known as the [3D Elevation Program](https://www.usgs.gov/core-science-systems/ngp/3dep) (3DEP). 3DEP is part of the larger National Map program, which provides all sorts of useful geospatial data covering the entire US (*e.g.*, political boundaries, rivers and streams, roads, etc.).
 
+The finest-grain seamless DEM for the entire US has a 1/3 arc-second resolution. That means that the resolution is approximately 10 meters (varies by latitude). This resolution is very good for our purposes, so that's what we'll work with.
+
 Like the majority of public data sources, the National Map has a dedicated website for interactive data download. You can download National Map data, including DEMs, interactively from [this platform](https://apps.nationalmap.gov/downloader/#/).
 
 But of course, what we're really interested in for this workshop is a way to download DEMs programmatically and reproducibly for our analysis.
 
 ## Downloading Data (the hard way)
 
+The 3DEP data are available in tiles, similar to how the Daymet SWE data is available in tiles. However, the tiles for the 3DEP data are *conveniently* in 1 degree x 1 degree sections. So if you know that latitude and longitude of a location, you can easily tell by rounding what tile you're in. 
+
+The data are stored on an AWS HTTPS server. Here's an example URL:
+`"https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/TIFF/n42w112/USGS_13_n42w112.tif"`
+
+You can tell that the base URL is everything before the coordinates: `https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/TIFF/`
+
+The next directory is the latitude then longitude, with directional indicator, concatenated together. These numbers are the *maximum* value in the tile. In this example, `n42w112` is thus a tile that goes from 41°N up to 42°N and from 111°W to 112°W. Note that °W can also be expressed as negative degrees, so the tile name is actually the *minimum* value in a negative tile.
+
+Finally, the filename is just `USGS_13_` (for 1/3 arc-second) followed by the tile again: `USGS_13_n42w112.tif`.
+
+So we could construct the URL and download the file just like this:
+
+```{r elev manual, eval = FALSE}
+# Specify the tile
+tile <- "n42w112"
+# Create the URL
+elev_url <- paste0("https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/TIFF/",
+                   tile, "/",
+                   "USGS_13_", tile, ".tif") 
+# Download
+download.file(elev_url,
+              "my_elev.tif",
+              mode = "wb")
+
+# Load and plot
+library(raster)
+dem <- raster("my_elev.tif")
+plot(dem)
+```
+
+```{r plot dem, echo = FALSE}
+# Actually doing the plotting since last chunk wasn't evaluated
+suppressWarnings({
+  suppressPackageStartupMessages({
+    library(raster)})
+})
+dem <- raster("my_elev.tif")
+plot(dem)
+```
+
 ## Downloading Data (the easy way)
 
-### My functions
+### Package `elevdl`
 
 As with the SWE data, I've compiled the workflow above into a few R functions for ease of use. It does seem to me like this is too small to really stand alone as a full-fledged R package, and it seems to me like one option would be to incorporate download functions for several datatypes together in one R package.
 
-But, alas, I'm not there yet. So you can grab this small set of functions from a mini R package on my GitHub. I would expect this package to be superceded in the near future, but any updates I make will be documented in the README for this package on GitHub.
+But, alas, I’m not there yet. So you can grab this small set of functions from a mini R package on [my GitHub](https://github.com/bsmity13/elevdl). I would expect this package to be superceded in the near future, but any updates I make will be documented in the README for this package on GitHub.
+
+You can install the package from GitHub like this:
+
+```{r install elevdl, eval = FALSE}
+devtools::install_github("bsmity13/elevdl")
+```
+
+And then attach it as usual:
+
+```{r attach elevdl}
+library(elevdl)
+```
+
+The first function in `elevdl` is `elev_url()`, which creates the URL(s) from either a single point's coordinates or a `data.frame` of coordinates. 
+
+For a point, you can simply pass a vector with the x- and y-coordinates of a location, and the function will return the URL.
+
+```{r elevdl point}
+elev_url(c(-111.419, 41.94))
+```
+
+For a bunch of points (maybe all the GPS locations in your dataset?), you can pass a two-column `data.frame` with only the x- and y-coordinates. It will return URL(s) for the tiles that cover all your locations.
+
+```{r elevdl df}
+locs <- data.frame(x = c(-111.5, -112.5),
+                   y = c(41.5, 40.5))
+elev_url(locs)
+```
+
+Download functions are still in a draft stage in this package, but you can simply pass the URLs to `download.files()` as usual to download the data.
 
 ### Package `elevatr`
 
@@ -45,7 +118,33 @@ I think I'd be remiss if I didn't mention an existing R package for downloading 
 
 Based on my reading of the documentation, along with a few examples I've worked through, it seems to me that the data this package downloads is an amalgamation of several potential datasets, depending on the zoom/resolution. The interface reminds me of those for other web mapping services, such as leaflet, where you specify a centroid and a "zoom level" ranging from 1 -- 14. I think the package primarily queries Mapzen tiles stored on AWS servers, which may contain data from several providers.
 
-As a matter of personal preference, I'd rather download a single tile from a known data source, which is why I worked on the download functions that go directly to the USGS. But you should also be aware of `elevatr`, so let's briefly have a look at how it works.
+As a matter of personal preference, I'd rather download a single tile from a known data source, which is why I worked on the download functions that go directly to the USGS 3DEP data. But you should also be aware of `elevatr`, so let's briefly have a look at how it works.
+
+```{r elevatr}
+# Load packages
+library(elevatr)
+library(sp)
+library(raster)
+
+# Load example data
+data(lake)
+# Plot
+plot(lake)
+
+# Get medium res data
+elev_med <- get_elev_raster(lake, z = 9)
+# Plot
+plot(elev_med)
+plot(lake, add = TRUE)
+
+# Get high res data ----
+elev_hi <- get_elev_raster(lake, z = 14)
+# Plot
+plot(elev_hi)
+plot(lake, add = TRUE)
+```
+
+The package is easy to use if you're happy with specifying zoom levels to determine which dataset you get.
 
 ### Web Interface
 

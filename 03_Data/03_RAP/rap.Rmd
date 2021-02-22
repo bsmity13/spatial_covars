@@ -81,9 +81,116 @@ https://rangelands.app/products/#sagebrush-conservation
 
 ## Downloading Data (the hard way)
 
+In this example, we'll download the percent cover layer, but the process is basically the same for any layer available as a GeoTIFF (see data descriptions). You can find those data here: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/
+
+We need to use `gdal_translate` to grab just the window of the data we need. Recall from the GDAL module that `gdal_translate` has a lot of potential [arguments](https://gdal.org/programs/gdal_translate.html). For example, you might already know when you download the data that you are going to resample to a coarser (or finer) resolution. If so, you might want to do it now, rather than once the raster is sitting on your hard drive, taking up space. But here, we'll just use a handful of useful arguments.
+
+We'll start by using `paste()` to build the shell command for `gdal_translate`. Then we will pass that string to the shell using `shell()` (on Windows) or `system()` on Mac.
+
+*Important note!* Remember how we discussed that Windows is the "weird" operating system that uses the backslash (`\`)? Well, backslash means something else to other systems, and since R was originally built on Linux, R uses the forward slash (`/`). **When R sees a backslash in a string, it reads it as a special character.** For example, `"\n"` is the character for a new line. Anything that starts with `\u` is a code for a Unicode character. And any character that otherwise has a special meaning (like a quote) can be "escaped" with a backslash. Here's an example you can run in your own R session:
+
+```{r special char, eval = FALSE}
+newline <- "\n"
+plusminus <- "\u00b1"
+lambda <- "\u03bb"
+Sigma <- "\u03a3"
+doublequote <- "\""
+smiley <- "\u263a"
+
+cat(paste(doublequote, lambda, plusminus, Sigma, doublequote, 
+          newline, newline, smiley, newline, newline,
+          doublequote, lambda, plusminus, Sigma, doublequote))
+
+```
+
+All that is to say that backslash means something special. But we need the backslash in our shell code if we're on Windows, so we need to "escape" it, by preceding it with a ... backslash! So basically, you need to type double backslashes if you're on Windows. If you're on Mac or Linux, use the forward slash instead!
+
+Okay, let's compose our shell command.
+
+```{r create command}
+# Years to download
+y <- 2015:2019
+
+# Bounding coordinates
+xmin <- -111.75
+xmax <- -111.25
+ymin <- 41.5
+ymax <- 42.0
+
+# Path to gdal_translate (on my machine)
+trans_path <- "C:\\OSGeo4W64\\bin\\gdal_translate.exe"
+
+# Any optional parameters we want to pass, including window
+parms <- paste0("-co compress=lzw ",
+                "-co tiled=yes ", 
+                "-projwin ", paste(xmin, ymax, xmax, ymin))
+
+# Base URL for RAP % cover
+# "/vsicurl" tells GDAL it's a remote file
+base_url <- "/vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/"
+
+# Input filenames
+in_files <- paste0(base_url, "vegetation-cover-v2-", y, ".tif")
+
+# Output filenames
+out_files <- paste0("RAP_", y, ".tif")
+
+# Now paste it all together
+shell_command <- paste(trans_path,
+                       parms,
+                       in_files,
+                       out_files)
+
+# Print
+print(shell_command)
+```
+
+You can see we have 1 character string per year, for a total of 5 different strings we want to run. Each one will execute a command to download one year of data. All that's left to do is pass each one to the system to run. One particularly easy way to do that is with `lapply()`, but you could write a `for()` loop or whatever else you like to do to iterate.
+
+On Windows:
+
+```{r download win, eval = FALSE}
+lapply(shell_command, shell)
+```
+
+On Linux or Mac:
+
+```{r download unix, eval = FALSE}
+lapply(shell_command, system)
+```
+
+### Loading data
+
+The RAP GeoTIFFs for % cover have 6 bands:
+
+  1. Annual forbs and grasses
+  2. Bare ground
+  3. Litter
+  4. Perennial forbs and grasses
+  5. Shrubs
+  6. Trees
+  
+If you try to load them in R with `raster()`, it will quietly default to `band = 1`, and you will be looking at only annual forbs and grasses. Make sure you specify which band you want!
+
+```{r attach raster, echo = FALSE}
+suppressPackageStartupMessages(library(raster))
+```
+
+```{r load bands}
+library(raster)
+
+band1 <- raster("RAP_2015.tif", band = 1)
+band6 <- raster("RAP_2015.tif", band = 6)
+
+par(mfrow = c(1, 2))
+plot(band1, main = "Annual Forbs and Grasses")
+plot(band6, main = "Trees")
+
+```
+
 ## Downloading Data (the easy way)
 
-Sorry, there's no easy way right now!
+Sorry, there's no easy way right now! *Someone* could certainly write a function that takes some coordinates, creates a bounding box, and uses `paste()` to create the GDAL command. But there could be issues for other users if their GDAL utilities are not in the same location as the function assumes. There are certainly work-arounds, but they do not currently exist.
 
 ## Downloading Data (the other way)
 

@@ -21,7 +21,7 @@ Start by opening your favorite command line interface.
 
 *But Brian, I don't have a favorite command line interface.*
 
-Neither do I. I have done a bit of dabbling, but I mostly use Window's default, `cmd.exe`, even though I have PowerShell and Git bash ready to go. `-1 nerd point` for me `r emo::ji("thumbs down")`
+Neither do I. I have done a bit of dabbling, but I mostly use Window's default, `cmd.exe`, even though I have PowerShell and Git bash ready to go. `-1 nerd point` for me `r emo::ji("nerd")` `r emo::ji("thumbs down")`
 
 If you don't have a favorite, either, open the default:  
 
