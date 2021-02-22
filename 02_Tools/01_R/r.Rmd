@@ -221,8 +221,8 @@ Let's see two examples: (1) a webpage and (2) an image.
 
   1. Anytime your OS sees a file path starting with `"https://"`, it will know to use your web browser to open it.  
 
-  - On Windows: `shell.exec("https://www.github.com")`
-  - On Mac: `system("https://www.github.com")`
+  - On Windows: `shell.exec("https://github.com")`
+  - On Mac: `system("https://github.com")`
     
   2. As opposed to `"https://"`, paths to files will start with `"file:///"` (yes, three slashes). This is not necessary if you're using a relative path to call a file (in an up-to-date version of R). In this R Markdown's current directory, there is an image called `"happy.png"`. Let's open it.  
   

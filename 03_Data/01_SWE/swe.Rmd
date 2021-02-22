@@ -115,7 +115,7 @@ We'll start by looking at how to download data the hard way. I want to go throug
 
 #### Step 1: Find the data
 
-The obvious place to start is on the [Daymet website]("https://daymet.ornl.gov/"). From there, it's fairly easy to find the link to "Get Data".
+The obvious place to start is on the [Daymet website](https://daymet.ornl.gov/). From there, it's fairly easy to find the link to "Get Data".
 
 ```{r daymet home, echo = FALSE, out.width = "100%"}
 knitr::include_graphics("../../img/daymet_home.png")

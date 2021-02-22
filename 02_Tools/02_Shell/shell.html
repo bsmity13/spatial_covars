@@ -1583,15 +1583,15 @@ C:\Users\bsmit\Documents\R\win-library&gt; cd 4.0</code></pre>
 <p>Now that we know how to get around, how do we run a program? Well, we can navigate to the program’s directory and then type the program’s name. This would be calling the program using its <strong>relative path</strong>. For example, I can run R from the command line:</p>
 <pre class="bash"><code>C:\Users\bsmit&gt; cd C:\Program Files\R\R-4.0.3\bin
 C:\Program Files\R\R-4.0.3\bin&gt; R.exe</code></pre>
-<p>We can also call programs using their absolute path <em>without</em> changing directories.</p>
-<pre class="bash"><code>C:\Users\bsmit&gt; C:\Program Files\R\R-4.0.3\bin\R.exe</code></pre>
+<p>We can also call programs using their absolute path <em>without</em> changing directories. (<em>Note that we need double quotes here because of the space in <code>Program Files</code>. One good reason not to have spaces in your directories or filenames</em>).</p>
+<pre class="bash"><code>C:\Users\bsmit&gt; &quot;C:\Program Files\R\R-4.0.3\bin\R.exe&quot;</code></pre>
 <p>We’ll see why this is useful later.</p>
 <div id="the-system-path" class="section level3">
 <h3>The System PATH</h3>
 <p>What if, for example, we needed to run R often from different directories? We might get pretty tired of typing <code>C:\Program Files\R\R-4.0.3\bin\R.exe</code> every time we need to run it.</p>
 <p>Your operating system has a list of directories where commonly used programs live. That list is called the system PATH (usually written in all caps to distinguish from the path to a resource). If your program’s directory is on the PATH, you can omit the path when you call your program. For example, if <code>C:\Program Files\R\R-4.0.3\bin\</code> was on my system’s path (it isn’t), I could be anywhere on my machine and type:</p>
 <pre class="bash"><code>C:\Users\bsmit&gt; R.exe</code></pre>
-<p>The PATH is a convenient way for <em>other</em> programs to know where a resource lives. For example, if you’re working in R on Windows and you want to build a package from source, R needs to know where <code>Rtools.exe</code> lives. It doesn’t necessarily know how your computer is setup or what your directory structure looks like. But if the path to <code>Rtools</code> is on the PATH, it doesn’t need to know. (Which is exactly why any of us using Windows had to add <code>Rtools</code> to the PATH when we installed it).</p>
+<p>The PATH is a convenient way for <em>other</em> programs to know where a resource lives. For example, if you’re working in R on Windows and you want to build a package from source, R needs to know where the various Rtools <code>*.exe</code>s live. It doesn’t necessarily know how your computer is setup or what your directory structure looks like. But if the path to <code>Rtools</code> is on the PATH, it doesn’t need to know. (Which is exactly why any of us using Windows had to add <code>Rtools</code> to the PATH when we installed it).</p>
 <p>You might want to know what directories are on your path.</p>
 <p>On Windows:</p>
 <pre class="bash"><code>C:\Users\bsmit&gt; PATH</code></pre>

@@ -121,10 +121,10 @@ C:\Users\bsmit> cd C:\Program Files\R\R-4.0.3\bin
 C:\Program Files\R\R-4.0.3\bin> R.exe
 ```
 
-We can also call programs using their absolute path *without* changing directories.
+We can also call programs using their absolute path *without* changing directories. (*Note that we need double quotes here because of the space in `Program Files`. One good reason not to have spaces in your directories or filenames*).
 
 ```{bash run R abs, eval = FALSE}
-C:\Users\bsmit> C:\Program Files\R\R-4.0.3\bin\R.exe
+C:\Users\bsmit> "C:\Program Files\R\R-4.0.3\bin\R.exe"
 ```
 
 We'll see why this is useful later.
@@ -139,7 +139,7 @@ Your operating system has a list of directories where commonly used programs liv
 C:\Users\bsmit> R.exe
 ```
 
-The PATH is a convenient way for *other* programs to know where a resource lives. For example, if you're working in R on Windows and you want to build a package from source, R needs to know where `Rtools.exe` lives. It doesn't necessarily know how your computer is setup or what your directory structure looks like. But if the path to `Rtools` is on the PATH, it doesn't need to know. (Which is exactly why any of us using Windows had to add `Rtools` to the PATH when we installed it).
+The PATH is a convenient way for *other* programs to know where a resource lives. For example, if you're working in R on Windows and you want to build a package from source, R needs to know where the various Rtools `*.exe`s live. It doesn't necessarily know how your computer is setup or what your directory structure looks like. But if the path to `Rtools` is on the PATH, it doesn't need to know. (Which is exactly why any of us using Windows had to add `Rtools` to the PATH when we installed it).
 
 You might want to know what directories are on your path. 
 
