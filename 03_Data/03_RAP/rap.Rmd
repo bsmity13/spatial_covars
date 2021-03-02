@@ -123,6 +123,7 @@ trans_path <- "C:\\OSGeo4W64\\bin\\gdal_translate.exe"
 # Any optional parameters we want to pass, including window
 parms <- paste0("-co compress=lzw ",
                 "-co tiled=yes ", 
+                "-co BIGTIFF=YES",
                 "-projwin ", paste(xmin, ymax, xmax, ymin))
 
 # Base URL for RAP % cover

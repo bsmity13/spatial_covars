@@ -1630,6 +1630,7 @@ trans_path &lt;- &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe&quot;
 # Any optional parameters we want to pass, including window
 parms &lt;- paste0(&quot;-co compress=lzw &quot;,
                 &quot;-co tiled=yes &quot;, 
+                &quot;-co BIGTIFF=YES&quot;,
                 &quot;-projwin &quot;, paste(xmin, ymax, xmax, ymin))
 
 # Base URL for RAP % cover
@@ -1650,11 +1651,11 @@ shell_command &lt;- paste(trans_path,
 
 # Print
 print(shell_command)</code></pre>
-<pre><code>## [1] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2015.tif RAP_2015.tif&quot;
-## [2] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2016.tif RAP_2016.tif&quot;
-## [3] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2017.tif RAP_2017.tif&quot;
-## [4] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2018.tif RAP_2018.tif&quot;
-## [5] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2019.tif RAP_2019.tif&quot;</code></pre>
+<pre><code>## [1] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -co BIGTIFF=YES-projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2015.tif RAP_2015.tif&quot;
+## [2] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -co BIGTIFF=YES-projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2016.tif RAP_2016.tif&quot;
+## [3] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -co BIGTIFF=YES-projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2017.tif RAP_2017.tif&quot;
+## [4] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -co BIGTIFF=YES-projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2018.tif RAP_2018.tif&quot;
+## [5] &quot;C:\\OSGeo4W64\\bin\\gdal_translate.exe -co compress=lzw -co tiled=yes -co BIGTIFF=YES-projwin -111.75 42 -111.25 41.5 /vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v2/vegetation-cover-v2-2019.tif RAP_2019.tif&quot;</code></pre>
 <p>You can see we have 1 character string per year, for a total of 5 different strings we want to run. Each one will execute a command to download one year of data. All that’s left to do is pass each one to the system to run. One particularly easy way to do that is with <code>lapply()</code>, but you could write a <code>for()</code> loop or whatever else you like to do to iterate.</p>
 <p>On Windows:</p>
 <pre class="r"><code>lapply(shell_command, shell)</code></pre>
