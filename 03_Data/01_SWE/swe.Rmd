@@ -364,7 +364,7 @@ download_SNODAS(as.Date("2019-02-22"),
 # Unpack
 unpack_SNODAS(tar_dir = "test") #unpacks all tarballs in directory
 # Write to raster
-rasterize_SNODAS(extent = extent(-111, -109, 44, 46))
+rasterize_SNODAS(crop = extent(-111, -109, 44, 46))
 ```
 
 ## Conclusion
